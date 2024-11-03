@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Event {
+  id                    Int      @id @default(autoincrement())
+  createdAt             String
+  name                  String
+  seasonId              Int
+  eventCode             String   @unique
+  startDate             String
+  endDate               String
+  isComplete            Boolean  @default(false)
+  isSubmissionClosed    Boolean  @default(false)
+  isSetup               Boolean? @default(false)
+  numberOfTeamPicks     Int      @default(8)
+  numberOfCategoryPicks Int      @default(5)
+  Season                Season   @relation(fields: [seasonId], references: [id])
+  Pick                  Pick[]
+}
+
+model Pick {
+  id           Int     @id @default(autoincrement())
+  createdAt    String
+  userId       String
+  userFullname String
+  displayName  String?
+  answersJSON  String
+  eventId      Int
+  Event        Event   @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId])
+}
+
+model Season {
+  id          Int     @id @default(autoincrement())
+  createdAt   String
+  year        Int
+  district    String
+  districtKey String
+  Event       Event[]
+}

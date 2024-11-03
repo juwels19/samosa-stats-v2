@@ -6,7 +6,12 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        geistMono: "--font-geist-mono",
+        geistSans: "--font-geist-sans",
+      },
+    },
   },
   plugins: [],
 };
