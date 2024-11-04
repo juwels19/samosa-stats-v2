@@ -7,6 +7,7 @@ const config: Config = {
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -20,8 +21,29 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {},
+      animation: {
+        shine: "shine var(--duration) infinite linear",
+        rainbow: "rainbow 10s infinite linear",
+      },
+      keyframes: {
+        shine: {
+          "0%": {
+            "background-position": "0% 0%",
+          },
+          "50%": {
+            "background-position": "100% 100%",
+          },
+          to: {
+            "background-position": "0% 0%",
+          },
+        },
+        rainbow: {
+          "0%": { "background-position": "0%" },
+          "100%": { "background-position": "200%" },
+        },
+      },
     },
   },
-  plugins: [require("tailwindcss-animate"), nextui()],
+  plugins: [nextui(), require("tailwindcss-animate")],
 };
 export default config;

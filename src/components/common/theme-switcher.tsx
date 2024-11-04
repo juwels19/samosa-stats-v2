@@ -14,17 +14,17 @@ export function ThemeSwitcher() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return <Skeleton className="size-5" />;
+  if (!mounted) return <Skeleton className="size-9" />;
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      onClick={() => (theme === "light" ? setTheme("dark") : setTheme("light"))}
+      aria-label="Toggle theme"
     >
-      <Sun className="dark:hidden" />
-      <Moon className="hidden dark:block" />
-      <span className="sr-only">Toggle theme</span>
+      <Sun className="hidden dark:block" />
+      <Moon className="block dark:hidden" />
     </Button>
   );
 }
