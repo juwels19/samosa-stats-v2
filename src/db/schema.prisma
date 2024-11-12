@@ -39,10 +39,16 @@ model Pick {
 }
 
 model Season {
-  id          Int     @id @default(autoincrement())
-  createdAt   String
-  year        Int
-  district    String
-  districtKey String
-  Event       Event[]
+  id        Int     @id @default(autoincrement())
+  createdAt String
+  year      Int     @unique
+  gameName  String
+  isActive  Boolean @default(false)
+  Event     Event[]
+}
+
+model Category {
+  id        Int    @id @default(autoincrement())
+  createdAt String
+  text      String
 }

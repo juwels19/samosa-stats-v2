@@ -21,9 +21,8 @@ import {
 const logo = "/SS_logo.png";
 
 const menuItems = [
-  { label: "Home", href: "/" },
-  { label: "Contact", href: "/contact" },
-  { label: "About", href: "/about" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Admin", href: "/admin" },
 ];
 
 const NavigationBar = () => {
