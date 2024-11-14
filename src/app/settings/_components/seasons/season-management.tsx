@@ -1,8 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { TriangleAlertIcon } from "lucide-react";
+import { CircleCheckIcon, TriangleAlertIcon } from "lucide-react";
 import React from "react";
-import NewSeasonButton from "~/app/settings/_components/seasons/new-season-button";
-import { AlertDescription } from "~/components/ui/alert";
+import NewSeasonForm from "~/app/settings/_components/seasons/new-season-form";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { getAllSeasons } from "~/db/queries/seasons";
 
@@ -14,26 +14,39 @@ const SeasonManagement = async () => {
 
   const isSignedInUserAdmin = signedInUser?.privateMetadata.admin as boolean;
 
-  // const activeSeason = allSeasons.find((season) => season.isActive);
+  const activeSeason = allSeasons.find((season) => season.isActive);
 
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="flex justify-between gap-4">
-          Season
-          <NewSeasonButton isAdmin={isSignedInUserAdmin} />
-        </CardTitle>
+        <CardTitle className="flex justify-between gap-4">Season</CardTitle>
       </CardHeader>
       <CardContent>
-        {allSeasons.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center gap-2">
-            <TriangleAlertIcon className="text-orange-500 size-10" />
-            <span className="font-semibold text-xl">No seasons found!</span>
+        {allSeasons.length === 0 && (
+          <Alert variant="warning" className="mb-4">
+            <TriangleAlertIcon />
+            <AlertTitle>No seasons found!</AlertTitle>
             <AlertDescription className="text-center text-balance">{`Click "Start new season" to get started. ${
               isSignedInUserAdmin ? "" : "Let an admin to start the new season."
             }`}</AlertDescription>
-          </div>
-        ) : null}
+          </Alert>
+        )}
+        {!activeSeason ? (
+          <Alert variant="warning" className="mb-4">
+            <TriangleAlertIcon />
+            <AlertTitle>No active season!</AlertTitle>
+            <AlertDescription>Please start a season below!</AlertDescription>
+          </Alert>
+        ) : (
+          <Alert variant="success" className="mb-4">
+            <CircleCheckIcon />
+            <AlertTitle>{"You're good to go!"}</AlertTitle>
+            <AlertDescription>
+              {activeSeason.gameName} is currently active!
+            </AlertDescription>
+          </Alert>
+        )}
+        <NewSeasonForm isAdmin={isSignedInUserAdmin} />
       </CardContent>
     </Card>
   );

@@ -163,12 +163,12 @@ const FormMessage = React.forwardRef<
       ref={ref}
       id={formMessageId}
       className={cn(
-        "text-[0.8rem] font-medium text-red-500 dark:text-red-900 flex flex-row gap-2 items-center",
+        "text-[0.8rem] font-medium text-red-500 dark:text-red-900 flex flex-row gap-1 items-center",
         className
       )}
       {...props}
     >
-      <OctagonAlertIcon color="red" className="size-3 h-[16px] w-[16px]" />
+      <OctagonAlertIcon color="red" className="size-3 h-[14px] w-[14px]" />
       <p>{body}</p>
     </div>
   );

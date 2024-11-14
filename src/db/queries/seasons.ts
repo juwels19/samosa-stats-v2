@@ -39,10 +39,6 @@ export async function createSeason({
       // The .code property can be accessed in a type-safe manner
       if (e.code === "P2002") {
         throw new Error("Season with this year already exists.");
-        // return {
-        //   error: true,
-        //   message: "Season with this year already exists.",
-        // };
       }
     }
   }
