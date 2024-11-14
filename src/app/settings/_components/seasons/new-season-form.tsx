@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import {
@@ -20,21 +20,8 @@ import { fetchSeasonInfoByYear } from "~/server/http/frc-events";
 import { createSeason } from "~/db/queries/seasons";
 import { Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "~/components/ui/alert-dialog";
 
 const NewSeasonForm = ({ isAdmin }: { isAdmin: boolean }) => {
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-
   const newSeasonFormSchema = z.object({
     year: z
       .number({
