@@ -13,6 +13,8 @@ import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { InfoIcon } from "lucide-react";
 import SeasonManagementLoading from "~/app/settings/_components/seasons/season-management-loading";
 import SeasonManagement from "~/app/settings/_components/seasons/season-management";
+import EventManagement from "~/app/settings/_components/events/event-management";
+import EventManagementLoading from "~/app/settings/_components/events/event-management-loading";
 
 export const metadata = {
   title: "Settings",
@@ -28,7 +30,8 @@ const AdminPage = () => {
         <InfoIcon className="size-5" />
         <AlertTitle>Heads up!</AlertTitle>
         <AlertDescription>
-          Approvers cannot edit season settings and cannot update user roles.
+          Approvers can <span className="font-semibold">ONLY </span>
+          approve, reject, or revoke user access.
         </AlertDescription>
       </Alert>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -52,6 +55,13 @@ const AdminPage = () => {
             </Suspense>
           </CardContent>
         </Card>
+
+        {/* Event management */}
+        <div className="md:col-span-2">
+          <Suspense fallback={<EventManagementLoading />}>
+            <EventManagement />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

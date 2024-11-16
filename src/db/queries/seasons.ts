@@ -8,6 +8,13 @@ export async function getAllSeasons() {
   return seasons;
 }
 
+export async function getActiveSeason() {
+  const season = await prisma.season.findFirst({
+    where: { isActive: true },
+  });
+  return season;
+}
+
 export async function createSeason({
   year,
   gameName,
