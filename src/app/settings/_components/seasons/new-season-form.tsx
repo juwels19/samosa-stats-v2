@@ -60,7 +60,6 @@ const NewSeasonForm = ({ isAdmin }: { isAdmin: boolean }) => {
   });
 
   const onFormSubmit = async (values: z.infer<typeof newSeasonFormSchema>) => {
-    console.log("in the submit");
     try {
       await newSeasonMutation.mutateAsync({
         year: values.year,

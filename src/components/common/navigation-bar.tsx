@@ -22,7 +22,7 @@ const logo = "/SS_logo.png";
 
 const menuItems = [
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Admin", href: "/admin" },
+  { label: "Settings", href: "/settings" },
 ];
 
 const NavigationBar = () => {
