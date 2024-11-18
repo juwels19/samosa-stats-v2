@@ -3,6 +3,15 @@ import { Prisma } from "@prisma/client";
 import { formatISO } from "date-fns";
 import prisma from "~/db";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const activeSeasonWithEvents = Prisma.validator<Prisma.SeasonDefaultArgs>()({
+  include: { Event: true },
+});
+
+export type ActiveSeasonWithEvents = Prisma.SeasonGetPayload<
+  typeof activeSeasonWithEvents
+>;
+
 export async function getAllSeasons() {
   const seasons = await prisma.season.findMany();
   return seasons;
@@ -11,6 +20,7 @@ export async function getAllSeasons() {
 export async function getActiveSeason() {
   const season = await prisma.season.findFirst({
     where: { isActive: true },
+    include: { Event: true },
   });
   return season;
 }

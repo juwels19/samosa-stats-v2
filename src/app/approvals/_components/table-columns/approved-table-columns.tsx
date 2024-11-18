@@ -4,7 +4,7 @@ import { ClerkUser } from "~/server/actions/clerk";
 import { ColumnDef } from "@tanstack/react-table";
 import { User } from "@nextui-org/user";
 import { CheckIcon, XIcon } from "lucide-react";
-import { ApprovedActionMenu } from "~/app/settings/_components/users/approved-action-menu";
+import { ApprovedActionMenu } from "~/app/approvals/_components/approved-action-menu";
 
 export const approvedTableColumns: ColumnDef<ClerkUser>[] = [
   {

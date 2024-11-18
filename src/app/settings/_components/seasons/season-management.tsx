@@ -40,10 +40,9 @@ const SeasonManagement = async () => {
         ) : (
           <Alert variant="success" className="mb-4">
             <CircleCheckIcon />
-            <AlertTitle>{"You're good to go!"}</AlertTitle>
-            <AlertDescription>
-              {activeSeason.gameName} is currently active!
-            </AlertDescription>
+            <AlertTitle className="mb-0 mt-[2px]">
+              {activeSeason.gameName} is the current active season!
+            </AlertTitle>
           </Alert>
         )}
         <NewSeasonForm isAdmin={isSignedInUserAdmin} />

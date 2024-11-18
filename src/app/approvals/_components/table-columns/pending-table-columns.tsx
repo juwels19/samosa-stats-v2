@@ -3,8 +3,8 @@
 import { ClerkUser } from "~/server/actions/clerk";
 import { ColumnDef } from "@tanstack/react-table";
 import { User } from "@nextui-org/user";
-import ApproveUserButton from "~/app/settings/_components/users/approve-user-button";
-import RejectUserButton from "~/app/settings/_components/users/reject-user-button";
+import ApproveUserButton from "~/app/approvals/_components/approve-user-button";
+import RejectUserButton from "~/app/approvals/_components/reject-user-button";
 
 export const pendingTableColumns: ColumnDef<ClerkUser>[] = [
   {

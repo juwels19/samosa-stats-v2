@@ -1,6 +1,6 @@
-import { approvedTableColumns } from "~/app/settings/_components/users/table-columns/approved-table-columns";
-import { pendingTableColumns } from "~/app/settings/_components/users/table-columns/pending-table-columns";
-import { rejectedTableColumns } from "~/app/settings/_components/users/table-columns/rejected-table-columns";
+import { approvedTableColumns } from "~/app/approvals/_components/table-columns/approved-table-columns";
+import { pendingTableColumns } from "~/app/approvals/_components/table-columns/pending-table-columns";
+import { rejectedTableColumns } from "~/app/approvals/_components/table-columns/rejected-table-columns";
 import { DataTable } from "~/components/ui/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { getClerkUsers } from "~/server/actions/clerk";

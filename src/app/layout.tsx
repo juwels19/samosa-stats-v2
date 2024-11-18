@@ -40,7 +40,7 @@ export default function RootLayout({
         >
           <Providers>
             <div className="min-h-svh font-geistSans bg-slate-50 dark:bg-slate-950">
-              <main className="flex flex-col gap-4 w-full min-h-svh max-w-[1440px] mx-auto">
+              <main className="flex flex-col w-full min-h-svh max-w-[1440px] mx-auto">
                 <NavigationBar />
                 <Toaster richColors position="top-right" closeButton />
                 {children}

@@ -30,6 +30,7 @@ import { Separator } from "~/components/ui/separator";
 import { Loader2Icon } from "lucide-react";
 import { Season } from "@prisma/client";
 import { toast } from "sonner";
+import { parse } from "date-fns";
 
 const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
   const [isFetchingEnabled, setIsFetchingEnabled] = useState(false);
@@ -59,10 +60,13 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
     mode: "all",
     reValidateMode: "onChange",
     resolver: zodResolver(newEventSchema),
-    defaultValues: {
+    values: {
       eventCode: "",
       numTeamPicks: 8,
       numCategoryPicks: 5,
+      eventName: "",
+      startDate: "",
+      endDate: "",
     },
   });
 
@@ -82,7 +86,6 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
   });
 
   useEffect(() => {
-    console.log(eventFetcher.data);
     newEventForm.setValue("eventName", eventFetcher.data?.name ?? undefined);
     newEventForm.setValue(
       "startDate",
@@ -112,19 +115,29 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
 
   const handleFormSubmit = async (values: z.infer<typeof newEventSchema>) => {
     try {
-      await newEventMutation.mutateAsync({
+      const newEvent = await newEventMutation.mutateAsync({
         eventData: {
           seasonId: activeSeason!.id,
           seasonYear: activeSeason!.year,
           eventCode: values.eventCode,
           eventName: values.eventName,
-          startDate: values.startDate,
-          endDate: values.endDate,
+          startDate: parse(
+            values.startDate,
+            "EEE MMM dd yyyy",
+            new Date()
+          ).toISOString(),
+          endDate: parse(
+            values.endDate,
+            "EEE MMM dd yyyy",
+            new Date()
+          ).toISOString(),
           numTeamPicks: values.numTeamPicks,
           numCategoryPicks: values.numCategoryPicks,
         },
       });
-      toast.success("Event created successfully!");
+      toast.success(
+        `${newEvent?.data.newEvent.eventCode} was created successfully!`
+      );
       setIsDialogOpen(false);
     } catch (e) {
       const error = e as Error;
