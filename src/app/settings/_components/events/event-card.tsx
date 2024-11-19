@@ -25,9 +25,8 @@ const EventCard = ({ event }: { event: Event }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="overflow-hidden text-ellipsis whitespace-nowrap">
-          {event.name}
-        </CardTitle>
+        {/* overflow-hidden text-ellipsis whitespace-nowrap */}
+        <CardTitle className="text-balance">{event.name}</CardTitle>
         <CardDescription>
           <span className="font-semibold">{event.eventCode}</span>
           <br />

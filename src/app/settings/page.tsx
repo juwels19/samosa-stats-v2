@@ -4,6 +4,8 @@ import SeasonManagementLoading from "~/app/settings/_components/seasons/season-m
 import SeasonManagement from "~/app/settings/_components/seasons/season-management";
 import EventManagement from "~/app/settings/_components/events/event-management";
 import EventManagementLoading from "~/app/settings/_components/events/event-management-loading";
+import CategoryManagement from "~/app/settings/_components/categories/category-management";
+import CategoryManagementLoading from "~/app/settings/_components/categories/category-management-loading";
 
 export const metadata = {
   title: "Settings",
@@ -19,6 +21,10 @@ const SettingsPage = () => {
         {/* Season management */}
         <Suspense fallback={<SeasonManagementLoading />}>
           <SeasonManagement />
+        </Suspense>
+
+        <Suspense fallback={<CategoryManagementLoading />}>
+          <CategoryManagement />
         </Suspense>
 
         {/* Event management */}

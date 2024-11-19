@@ -9,11 +9,13 @@ const SeasonManagementLoading = () => {
         <CardTitle className="flex justify-between gap-4">Season</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <Skeleton className="h-20 w-full" />
-        <Skeleton className="h-6 w-10" />
-        <Skeleton className="h-6 w-full" />
-        <Skeleton className="h-6 w-10" />
-        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-[52px] w-full" />
+        <Skeleton className="h-4 w-10" />
+        <Skeleton className="h-9 w-full" />
+        <Skeleton className="h-4 w-10" />
+        <Skeleton className="h-9 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-9 w-1/4" />
       </CardContent>
     </Card>
   );

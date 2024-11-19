@@ -41,9 +41,6 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
       .string({ required_error: "Event code is required" })
       .refine((val) => val.length > 0, {
         message: "Event code is required",
-      })
-      .refine((val) => !/\d/.test(val), {
-        message: "Event code cannot contain numbers",
       }),
     numTeamPicks: z
       .number({ required_error: "Number of team picks is required" })

@@ -8,13 +8,6 @@ import { getActiveSeason } from "~/db/queries/seasons";
 
 const EventManagement = async () => {
   const [activeSeason] = await Promise.all([getActiveSeason()]);
-
-  console.log(
-    activeSeason?.Event.sort((a, b) =>
-      compareAsc(parseJSON(a.startDate), parseJSON(b.startDate))
-    )
-  );
-
   return (
     <Card className="h-full">
       <CardHeader className="w-full">
@@ -35,7 +28,9 @@ const EventManagement = async () => {
           </Alert>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {activeSeason?.Event.map((event) => (
+          {activeSeason?.Event.sort((a, b) =>
+            compareAsc(parseJSON(a.startDate), parseJSON(b.startDate))
+          ).map((event) => (
             <EventCard key={event.eventCode} event={event} />
           ))}
         </div>

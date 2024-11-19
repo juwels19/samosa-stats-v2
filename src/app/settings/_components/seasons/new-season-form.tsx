@@ -125,15 +125,17 @@ const NewSeasonForm = ({ isAdmin }: { isAdmin: boolean }) => {
             </FormItem>
           )}
         />
-        <Button
-          disabled={newSeasonMutation.isPending || !isAdmin}
-          type="submit"
-        >
-          {newSeasonMutation.isPending && (
-            <Loader2Icon className="animate-spin" />
-          )}
-          Start season!
-        </Button>
+        <div>
+          <Button
+            disabled={newSeasonMutation.isPending || !isAdmin}
+            type="submit"
+          >
+            {newSeasonMutation.isPending && (
+              <Loader2Icon className="animate-spin" />
+            )}
+            Start season!
+          </Button>
+        </div>
       </form>
     </Form>
   );
