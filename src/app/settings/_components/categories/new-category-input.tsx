@@ -2,12 +2,13 @@
 
 import { CirclePlusIcon, Loader2Icon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory } from "~/db/queries/categories";
+import { CategoryContext } from "~/app/settings/_components/categories/context";
 
 const NewCategoryInput = () => {
   const [showInput, setShowInput] = useState(false);
@@ -17,9 +18,14 @@ const NewCategoryInput = () => {
 
   const queryClient = useQueryClient();
 
+  const { activeSeasonId } = useContext(CategoryContext);
+
   const newCategoryMutation = useMutation({
     mutationFn: async (categoryName: string) => {
-      const newCategory = await createCategory({ text: categoryName });
+      const newCategory = await createCategory({
+        text: categoryName,
+        seasonId: activeSeasonId,
+      });
       return newCategory;
     },
     onSuccess: () => {

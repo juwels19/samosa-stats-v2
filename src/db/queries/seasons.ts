@@ -17,10 +17,12 @@ export async function getAllSeasons() {
   return seasons;
 }
 
-export async function getActiveSeason() {
+export async function getActiveSeason({
+  includeEvents = false,
+}: { includeEvents?: boolean } = {}) {
   const season = await prisma.season.findFirst({
     where: { isActive: true },
-    include: { Event: true },
+    include: includeEvents ? { Event: true } : undefined,
   });
   return season;
 }

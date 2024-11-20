@@ -7,7 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { getActiveSeason } from "~/db/queries/seasons";
 
 const EventManagement = async () => {
-  const [activeSeason] = await Promise.all([getActiveSeason()]);
+  const [activeSeason] = await Promise.all([
+    getActiveSeason({ includeEvents: true }),
+  ]);
   return (
     <Card className="h-full">
       <CardHeader className="w-full">

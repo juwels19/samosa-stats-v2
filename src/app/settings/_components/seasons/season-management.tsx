@@ -1,10 +1,11 @@
-import { currentUser } from "@clerk/nextjs/server";
 import { CircleCheckIcon, TriangleAlertIcon } from "lucide-react";
 import React from "react";
 import NewSeasonForm from "~/app/settings/_components/seasons/new-season-form";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { getAllSeasons } from "~/db/queries/seasons";
+
+import { currentUser } from "@clerk/nextjs/server";
 
 const SeasonManagement = async () => {
   const [allSeasons, signedInUser] = await Promise.all([
@@ -43,6 +44,9 @@ const SeasonManagement = async () => {
             <AlertTitle className="mb-0 mt-[2px]">
               {activeSeason.gameName} is the current active season!
             </AlertTitle>
+            <AlertDescription>
+              This season will apply for all settings on this page.
+            </AlertDescription>
           </Alert>
         )}
         <NewSeasonForm isAdmin={isSignedInUserAdmin} />

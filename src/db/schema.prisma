@@ -39,16 +39,19 @@ model Pick {
 }
 
 model Season {
-  id        Int     @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   createdAt String
-  year      Int     @unique
+  year      Int        @unique
   gameName  String
-  isActive  Boolean @default(false)
+  isActive  Boolean    @default(false)
   Event     Event[]
+  Category  Category[]
 }
 
 model Category {
   id        Int    @id @default(autoincrement())
   createdAt String
   text      String
+  seasonId  Int
+  Season    Season @relation(fields: [seasonId], references: [id])
 }

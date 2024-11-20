@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CategoryManagementLoading from "~/app/settings/_components/categories/category-management-loading";
 import { CategoryContext } from "~/app/settings/_components/categories/context";
 import EditableCategory from "~/app/settings/_components/categories/editable-category";
@@ -16,18 +16,34 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { getAllCategories } from "~/db/queries/categories";
+import { getCategoriesForActiveSeason } from "~/db/queries/categories";
+import { getActiveSeason } from "~/db/queries/seasons";
 
 const CategoryManagement = () => {
   const [hasEdits, setHasEdits] = useState(false);
+  const [activeSeasonId, setActiveSeasonId] = useState(0);
 
   const categories = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
-      const categories = await getAllCategories();
+      const categories = await getCategoriesForActiveSeason();
       return categories;
     },
   });
+
+  const activeSeason = useQuery({
+    queryKey: ["activeSeason"],
+    queryFn: async () => {
+      const categories = await getActiveSeason();
+      return categories;
+    },
+  });
+
+  useEffect(() => {
+    if (activeSeason.data) {
+      setActiveSeasonId(activeSeason.data.id);
+    }
+  }, [activeSeason.data]);
 
   if (!categories.data) return <CategoryManagementLoading />;
 
@@ -38,6 +54,8 @@ const CategoryManagement = () => {
         edits: categories.data,
         hasEdits,
         setHasEdits,
+        activeSeasonId,
+        setActiveSeasonId,
       }}
     >
       <Card className="h-full flex flex-col justify-between">

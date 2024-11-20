@@ -1,7 +1,10 @@
 "use client";
 
+import { Loader2Icon } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -12,14 +15,12 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "~/components/ui/input";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { fetchSeasonInfoByYear } from "~/server/http/frc-events";
 import { createSeason } from "~/db/queries/seasons";
-import { Loader2Icon } from "lucide-react";
-import { toast } from "sonner";
+import { fetchSeasonInfoByYear } from "~/server/http/frc-events";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const NewSeasonForm = ({ isAdmin }: { isAdmin: boolean }) => {
   const newSeasonFormSchema = z.object({

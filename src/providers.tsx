@@ -1,11 +1,12 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
+
 import { NextUIProvider } from "@nextui-org/react";
 import {
+  isServer,
   QueryClient,
   QueryClientProvider,
-  isServer,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";

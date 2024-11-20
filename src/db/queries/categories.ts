@@ -4,6 +4,7 @@ import { Category, Prisma } from "@prisma/client";
 import { formatISO } from "date-fns";
 import { revalidatePath } from "next/cache";
 import prisma from "~/db";
+import { getActiveSeason } from "~/db/queries/seasons";
 
 export async function getAllCategories() {
   const categories = await prisma.category.findMany({
@@ -12,12 +13,28 @@ export async function getAllCategories() {
   return categories;
 }
 
-export async function createCategory({ text }: { text: string }) {
+export async function getCategoriesForActiveSeason() {
+  const activeSeason = await getActiveSeason();
+
+  const categories = await prisma.category.findMany({
+    where: { seasonId: activeSeason!.id },
+  });
+  return categories;
+}
+
+export async function createCategory({
+  text,
+  seasonId,
+}: {
+  text: string;
+  seasonId: number;
+}) {
   const timestamp = formatISO(new Date());
   try {
     const newCategory = await prisma.category.create({
       data: {
         text,
+        Season: { connect: { id: seasonId } },
         createdAt: timestamp,
       },
     });
