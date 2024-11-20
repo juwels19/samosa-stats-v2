@@ -5,7 +5,6 @@ import localFont from "next/font/local";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import Providers from "~/providers";
-import NavigationBar from "~/components/common/navigation/navigation-bar";
 import { Toaster } from "sonner";
 import Navigation from "~/components/common/navigation/navigation";
 
@@ -42,7 +41,6 @@ export default function RootLayout({
           <Providers>
             <div className="min-h-svh font-geistSans bg-slate-50 dark:bg-slate-950">
               <main className="flex flex-col w-full min-h-svh max-w-[1440px] mx-auto">
-                {/* <NavigationBar /> */}
                 <Navigation />
                 <Toaster richColors position="top-right" closeButton />
                 {children}
