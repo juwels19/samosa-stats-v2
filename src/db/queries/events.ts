@@ -41,6 +41,7 @@ export async function createEvent({
     seasonYear: number;
     eventCode: string;
     eventName: string;
+    displayName: string;
     startDate: string;
     endDate: string;
     numTeamPicks: number;
@@ -53,6 +54,7 @@ export async function createEvent({
       data: {
         Season: { connect: { id: eventData.seasonId } },
         name: eventData.eventName,
+        displayName: eventData.displayName,
         eventCode: `${eventData.seasonYear}${eventData.eventCode}`,
         numberOfTeamPicks: eventData.numTeamPicks,
         numberOfCategoryPicks: eventData.numCategoryPicks,
@@ -81,6 +83,7 @@ export async function updateEvent({
     eventCode: string;
     numTeamPicks: number;
     numCategoryPicks: number;
+    displayName: string;
   };
 }) {
   try {
@@ -89,6 +92,7 @@ export async function updateEvent({
       data: {
         numberOfTeamPicks: eventData.numTeamPicks,
         numberOfCategoryPicks: eventData.numCategoryPicks,
+        displayName: eventData.displayName,
       },
     });
 

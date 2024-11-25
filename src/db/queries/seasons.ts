@@ -35,7 +35,6 @@ export async function createSeason({
   gameName: string;
 }) {
   const timestamp = formatISO(new Date());
-
   try {
     const [, newSeason] = await prisma.$transaction([
       prisma.season.updateMany({

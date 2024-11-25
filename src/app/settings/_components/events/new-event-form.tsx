@@ -51,6 +51,7 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
     eventName: z.string(),
     startDate: z.string(),
     endDate: z.string(),
+    displayName: z.string(),
   });
 
   const newEventForm = useForm<z.infer<typeof newEventSchema>>({
@@ -64,6 +65,7 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
       eventName: "",
       startDate: "",
       endDate: "",
+      displayName: "",
     },
   });
 
@@ -104,6 +106,7 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
         eventName: string;
         startDate: string;
         endDate: string;
+        displayName: string;
         numTeamPicks: number;
         numCategoryPicks: number;
       };
@@ -118,6 +121,7 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
           seasonYear: activeSeason!.year,
           eventCode: values.eventCode,
           eventName: values.eventName,
+          displayName: values.displayName,
           startDate: parse(
             values.startDate,
             "EEE MMM dd yyyy",
@@ -198,8 +202,19 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
                   </FormItem>
                 )}
               />
+              <FormField
+                name="displayName"
+                control={newEventForm.control}
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>Display name</FormLabel>
+                    <Input {...field} placeholder="Enter a display name..." />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="grid grid-cols-2 gap-4">
-                {/* # TEAM PICKS */}
+                {/* TEAM PICKS */}
                 <FormField
                   control={newEventForm.control}
                   name="numTeamPicks"

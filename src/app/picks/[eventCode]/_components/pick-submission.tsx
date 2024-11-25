@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2Icon, OctagonXIcon } from "lucide-react";
-import React, { useContext, useId } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -69,7 +69,7 @@ const PickSubmission = () => {
       categoryIds: Object.keys(categorySelections).filter(
         (categoryId) => categorySelections[categoryId]
       ),
-      displayName: event.Pick[0].displayName ?? "",
+      displayName: event.Pick[0]?.displayName ?? "",
     },
   });
 
@@ -125,7 +125,9 @@ const PickSubmission = () => {
             <p>No teams selected</p>
           ) : (
             filteredTeams.map((team) => (
-              <p key={useId()}>{`${team.teamNumber} - ${team.nameShort}`}</p>
+              <p
+                key={`team-${team.teamNumber}`}
+              >{`${team.teamNumber} - ${team.nameShort}`}</p>
             ))
           )}
         </div>
@@ -135,7 +137,7 @@ const PickSubmission = () => {
             <p>No categories selected</p>
           ) : (
             filteredCategories.map((category, index) => (
-              <React.Fragment key={useId()}>
+              <React.Fragment key={`${category.id}-${index}`}>
                 <p>{category.text}</p>
                 {index !== filteredCategories.length - 1 && <Separator />}
               </React.Fragment>

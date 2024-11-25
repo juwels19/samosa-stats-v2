@@ -37,15 +37,17 @@ const EditEventForm = ({ event }: { event: Event }) => {
     numCategoryPicks: z
       .number({ required_error: "Number of category picks is required" })
       .min(1),
+    displayName: z.string(),
   });
 
   const editEventForm = useForm<z.infer<typeof editEventSchema>>({
     mode: "all",
     reValidateMode: "onChange",
     resolver: zodResolver(editEventSchema),
-    defaultValues: {
+    values: {
       numTeamPicks: event.numberOfTeamPicks,
       numCategoryPicks: event.numberOfCategoryPicks,
+      displayName: event?.displayName ?? "",
     },
   });
 
@@ -55,6 +57,7 @@ const EditEventForm = ({ event }: { event: Event }) => {
         eventCode: string;
         numTeamPicks: number;
         numCategoryPicks: number;
+        displayName: string;
       };
     }) => updateEvent(updateData),
   });
@@ -66,6 +69,7 @@ const EditEventForm = ({ event }: { event: Event }) => {
           eventCode: event.eventCode,
           numTeamPicks: values.numTeamPicks,
           numCategoryPicks: values.numCategoryPicks,
+          displayName: values.displayName,
         },
       });
       toast.success("Event updated successfully!");
@@ -145,6 +149,17 @@ const EditEventForm = ({ event }: { event: Event }) => {
                 )}
               />
             </div>
+            <FormField
+              name="displayName"
+              control={editEventForm.control}
+              render={({ field }) => (
+                <FormItem className="space-y-1 mb-4">
+                  <FormLabel>Display Name</FormLabel>
+                  <Input {...field} placeholder="Enter a display name..." />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <DialogFooter>
               <Button type="submit" disabled={editEventMutation.isPending}>
                 {editEventMutation.isPending && (

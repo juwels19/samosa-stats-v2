@@ -30,7 +30,7 @@ const EventPickPage = async ({
       {/* PAGE HEADING + EXTERNAL LINKS */}
       <div className="flex flex-row gap-4 justify-between">
         <PageHeading
-          label={`${eventCode.slice(0, 4)} ${
+          label={`${eventCode.slice(0, 4)} - ${
             event?.displayName ?? event!.name
           }`}
           hasBackButton

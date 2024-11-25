@@ -44,8 +44,8 @@ const NewSeasonForm = ({ isAdmin }: { isAdmin: boolean }) => {
   });
 
   const newSeasonMutation = useMutation({
-    mutationFn: (newSeason: { year: number; gameName: string }) =>
-      createSeason(newSeason),
+    mutationFn: ({ year, gameName }: { year: number; gameName: string }) =>
+      createSeason({ year, gameName }),
   });
 
   const yearToFetch = newSeasonForm.watch("year");
@@ -89,6 +89,7 @@ const NewSeasonForm = ({ isAdmin }: { isAdmin: boolean }) => {
                 <Input
                   placeholder="Calendar year"
                   {...field}
+                  value={newSeasonForm.getValues("year") ?? ""}
                   onChange={(e) => {
                     if (e.target.value === "") {
                       newSeasonForm.setValue("year", 0, {

@@ -30,7 +30,7 @@ const PickTabs = ({
   );
 
   const [categorySelections, setCategorySelections] = useState(
-    event.Pick[0].Categories.length > 0
+    event?.Pick[0]?.Categories.length > 0
       ? Object.fromEntries(
           event.Pick[0].Categories.map((category: Category) => [
             category.id,
