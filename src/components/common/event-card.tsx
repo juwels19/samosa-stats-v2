@@ -96,7 +96,7 @@ const EventCard = ({
               )}
               <Link href={`${ROUTES.PICKS}/${event.eventCode}`}>
                 <Button variant="link">
-                  {!eventHasPicks ? "Submit Picks" : "Update Picks"}
+                  {!event.isSubmissionClosed ? "Submit Picks" : "View Picks"}
                   <MoveRightIcon />
                 </Button>
               </Link>

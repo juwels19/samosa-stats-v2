@@ -158,6 +158,7 @@ const PickSubmission = () => {
                 <FormLabel>Display name (optional)</FormLabel>
                 <Input
                   {...field}
+                  disabled={event.isSubmissionClosed}
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value.length > 200) {
@@ -175,7 +176,9 @@ const PickSubmission = () => {
           />
           <Button
             type="submit"
-            disabled={submitPickForm.formState.isSubmitting}
+            disabled={
+              submitPickForm.formState.isSubmitting || event.isSubmissionClosed
+            }
             className="max-w-fit"
           >
             {submitPickForm.formState.isSubmitting && (

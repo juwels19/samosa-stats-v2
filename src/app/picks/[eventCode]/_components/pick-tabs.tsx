@@ -51,11 +51,18 @@ const PickTabs = ({
         event,
       }}
     >
-      <Tabs defaultValue="teams" className="w-full">
+      <Tabs
+        defaultValue={event.isSubmissionClosed ? "submit" : "teams"}
+        className="w-full"
+      >
         <div className="w-full flex flex-row justify-center md:justify-start">
           <TabsList>
-            <TabsTrigger value="teams">Teams</TabsTrigger>
-            <TabsTrigger value="categories">Categories</TabsTrigger>
+            <TabsTrigger value="teams" disabled={event.isSubmissionClosed}>
+              Teams
+            </TabsTrigger>
+            <TabsTrigger value="categories" disabled={event.isSubmissionClosed}>
+              Categories
+            </TabsTrigger>
             <TabsTrigger value="submit">Submit</TabsTrigger>
           </TabsList>
         </div>
