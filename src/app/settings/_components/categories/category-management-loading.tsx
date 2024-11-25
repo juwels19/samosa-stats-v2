@@ -12,7 +12,7 @@ const CategoryManagementLoading = () => {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="flex justify-between gap-4">Season</CardTitle>
+        <CardTitle className="flex justify-between gap-4">Categories</CardTitle>
         <CardDescription>
           <Skeleton className="h-4 w-1/2" />
         </CardDescription>

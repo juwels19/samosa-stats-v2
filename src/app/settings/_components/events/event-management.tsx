@@ -1,15 +1,14 @@
 import { compareAsc, parseJSON } from "date-fns";
 import { TriangleAlertIcon } from "lucide-react";
-import EventCard from "~/app/settings/_components/events/event-card";
+import EventCard from "~/components/common/event-card";
 import NewEventForm from "~/app/settings/_components/events/new-event-form";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { getActiveSeason } from "~/db/queries/seasons";
 
 const EventManagement = async () => {
-  const [activeSeason] = await Promise.all([
-    getActiveSeason({ includeEvents: true }),
-  ]);
+  const activeSeason = await getActiveSeason({ includeEvents: true });
+
   return (
     <Card className="h-full">
       <CardHeader className="w-full">
@@ -33,7 +32,7 @@ const EventManagement = async () => {
           {activeSeason?.Event.sort((a, b) =>
             compareAsc(parseJSON(a.startDate), parseJSON(b.startDate))
           ).map((event) => (
-            <EventCard key={event.eventCode} event={event} />
+            <EventCard key={event.eventCode} event={event} isAdminCard />
           ))}
         </div>
       </CardContent>

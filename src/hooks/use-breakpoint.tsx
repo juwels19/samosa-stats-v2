@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect, useLayoutEffect } from "react";
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../tailwind.config";
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);

@@ -44,7 +44,6 @@ const NavigationBar = ({
   const pathname = usePathname();
 
   useEffect(() => {
-    console.log(pathname);
     setIsMenuOpen(false);
   }, [pathname]);
 

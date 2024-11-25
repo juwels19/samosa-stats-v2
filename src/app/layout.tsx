@@ -39,7 +39,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <Providers>
-            <div className="min-h-svh font-geistSans bg-slate-50 dark:bg-slate-950">
+            <div className="min-h-dvh font-geistSans bg-slate-50 dark:bg-slate-950">
               <main className="flex flex-col w-full min-h-svh max-w-[1440px] mx-auto">
                 <Navigation />
                 <Toaster richColors position="top-right" closeButton />

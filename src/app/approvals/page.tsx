@@ -5,6 +5,11 @@ import UserManagementLoading from "~/app/approvals/_components/user-management-l
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { H2 } from "~/components/ui/typography";
 
+export const metadata = {
+  title: "Approvals",
+  description: "Approve incoming degens",
+};
+
 const ApprovalPage = () => {
   return (
     <div className="w-full p-6 flex flex-col gap-4">

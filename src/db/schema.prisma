@@ -9,31 +9,32 @@ datasource db {
 }
 
 model Event {
-  id                    Int      @id @default(autoincrement())
+  id                    Int     @id @default(autoincrement())
   createdAt             String
   name                  String
+  displayName           String?
   seasonId              Int
-  eventCode             String   @unique
+  eventCode             String  @unique
   startDate             String
   endDate               String
-  isComplete            Boolean  @default(false)
-  isSubmissionClosed    Boolean  @default(false)
-  isSetup               Boolean? @default(false)
-  numberOfTeamPicks     Int      @default(8)
-  numberOfCategoryPicks Int      @default(5)
-  Season                Season   @relation(fields: [seasonId], references: [id])
+  isComplete            Boolean @default(false)
+  isSubmissionClosed    Boolean @default(false)
+  numberOfTeamPicks     Int     @default(8)
+  numberOfCategoryPicks Int     @default(5)
+  Season                Season  @relation(fields: [seasonId], references: [id])
   Pick                  Pick[]
 }
 
 model Pick {
-  id           Int     @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   createdAt    String
   userId       String
   userFullname String
   displayName  String?
   answersJSON  String
   eventId      Int
-  Event        Event   @relation(fields: [eventId], references: [id])
+  Event        Event      @relation(fields: [eventId], references: [id])
+  Categories   Category[]
 
   @@unique([userId, eventId])
 }
@@ -54,4 +55,5 @@ model Category {
   text      String
   seasonId  Int
   Season    Season @relation(fields: [seasonId], references: [id])
+  Picks     Pick[]
 }

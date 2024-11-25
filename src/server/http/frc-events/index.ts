@@ -57,4 +57,28 @@ export async function fetchEventByYearAndCode(year: string, eventCode: string) {
   return eventData.Events[0];
 }
 
+export type FrcEvents_Teams = {
+  schoolName: string;
+  website: string;
+  homeCMP: string;
+  teamNumber: number;
+  nameFull: string;
+  nameShort: string;
+  city: string;
+  stateProv: string;
+  country: string;
+  rookieYear: number;
+  robotName: string;
+  districtCode: string;
+}[];
+
+export async function fetchTeamsForEvent(
+  eventCode: string
+): Promise<FrcEvents_Teams> {
+  const { data } = await FrcEventsInstance.get(
+    `/${eventCode.slice(0, 4)}/teams?eventCode=${eventCode.slice(4)}`
+  );
+  return data.teams;
+}
+
 export default FrcEventsInstance;

@@ -70,15 +70,12 @@ export async function updateCategories({
       )
     );
 
-    console.log(updatedCategories);
-
     revalidatePath("/settings");
     return {
       success: true,
       data: { updatedCategories: JSON.stringify(updatedCategories) },
     };
   } catch (e) {
-    console.log(e);
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       throw new Error("There was an error updating the categories.");
     }
