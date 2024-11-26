@@ -1,5 +1,7 @@
 import { createClerkClient } from "@clerk/backend";
 
+import { env } from "~/lib/env";
+
 declare global {
   // var must be used for globally scoped variables
   // eslint-disable-next-line no-var
@@ -9,10 +11,10 @@ declare global {
 const clerkClient =
   global.clerkClient ||
   createClerkClient({
-    secretKey: process.env.CLERK_SECRET_KEY,
+    secretKey: env.CLERK_SECRET_KEY,
   });
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   global.clerkClient = clerkClient;
 }
 

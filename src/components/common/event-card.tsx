@@ -1,11 +1,11 @@
 "use client";
 
 import { parseJSON } from "date-fns";
-import { BellRingIcon, CheckIcon, MoveRightIcon } from "lucide-react";
-import { motion } from "motion/react";
+import { CheckIcon, MoveRightIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import EditEventForm from "~/app/settings/_components/events/edit-event-form";
+import NotificationButton from "~/app/settings/_components/events/notification-button";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -26,11 +26,6 @@ const EventCard = ({
   event: EventWithPicks;
   isAdminCard?: boolean;
 }) => {
-  const bellIconVariants = {
-    default: { rotate: 0 },
-    hover: { rotate: [0, -10, 10, -10, 0] },
-  };
-
   const eventHasPicks = (event.Pick && event?.Pick?.length !== 0) || false;
 
   return (
@@ -53,14 +48,21 @@ const EventCard = ({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 ">
-          <div className="flex flex-row gap-2">
-            <span className="font-semibold">Teams to pick:</span>
-            <span>{event.numberOfTeamPicks}</span>
+        <div className="grid grid-cols-2">
+          <div>
+            <div className="flex flex-row gap-2">
+              <span className="font-semibold">Teams to pick:</span>
+              <span>{event.numberOfTeamPicks}</span>
+            </div>
+            <div className="flex flex-row gap-2">
+              <span className="font-semibold">Categories to pick:</span>
+              <span>{event.numberOfCategoryPicks}</span>
+            </div>
           </div>
-          <div className="flex flex-row gap-2">
-            <span className="font-semibold">Categories to pick:</span>
-            <span>{event.numberOfCategoryPicks}</span>
+          <div className="flex flex-col gap-2 items-end">
+            {/* <span className="font-semibold">Time until gates close:</span> */}
+            {/* INSERT TIME LOGIC HERE */}
+            {/* <NumberFlow value={60} trend={-1} /> */}
           </div>
         </div>
       </CardContent>
@@ -73,25 +75,15 @@ const EventCard = ({
         >
           {isAdminCard ? (
             <>
-              <Button asChild size="sm" variant="link">
-                <motion.button
-                  type="button"
-                  initial="default"
-                  whileHover="hover"
-                >
-                  <motion.div variants={bellIconVariants}>
-                    <BellRingIcon className="!size-4" />
-                  </motion.div>
-                  Notify
-                </motion.button>
-              </Button>
+              <NotificationButton event={event} />
               <EditEventForm event={event} />
             </>
           ) : (
             <>
               {eventHasPicks && (
                 <p className="inline-flex items-center gap-1">
-                  Pick submitted <CheckIcon color="green" />
+                  <CheckIcon color="green" />
+                  Pick submitted
                 </p>
               )}
               <Link href={`${ROUTES.PICKS}/${event.eventCode}`}>

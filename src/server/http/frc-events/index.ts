@@ -1,10 +1,11 @@
 "use server";
 
 import axios from "axios";
+import { env } from "~/lib/env";
 // import { unstable_cacheLife as cacheLife } from "next/cache";
 
 const authorizationCredential = btoa(
-  `${process.env.FRC_EVENTS_USERNAME}:${process.env.FRC_EVENTS_API_TOKEN}`
+  `${env.FRC_EVENTS_USERNAME}:${env.FRC_EVENTS_API_TOKEN}`
 );
 
 const FrcEventsInstance = axios.create({

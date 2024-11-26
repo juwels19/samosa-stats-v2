@@ -12,7 +12,9 @@ export const metadata = {
 const DashboardPage = async () => {
   const user = await currentUser();
   const events = await getAllEventsAndPicksForUser(user!.id);
-  const openEvents = events.filter((event) => !event.isComplete);
+  const openEvents = events.filter(
+    (event) => !event.isComplete && !event.isSubmissionClosed
+  );
   const closedEvents = events.filter(
     (event) => event.isComplete || event.isSubmissionClosed
   );

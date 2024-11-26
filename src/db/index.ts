@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"; // Prisma ORM
+import { env } from "~/lib/env";
 
 // Add Prisma to the NodeJS global type
 declare global {
@@ -9,7 +10,7 @@ declare global {
 
 const prisma = global.prisma || new PrismaClient();
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   global.prisma = prisma;
 }
 
