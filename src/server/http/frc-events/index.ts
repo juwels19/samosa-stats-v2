@@ -52,10 +52,14 @@ export async function fetchDistrictsByYear(year: string) {
 }
 
 export async function fetchEventByYearAndCode(year: string, eventCode: string) {
-  const { data: eventData } = await FrcEventsInstance.get(
-    `/${year}/events?eventCode=${eventCode}`
-  );
-  return eventData.Events[0];
+  try {
+    const { data: eventData } = await FrcEventsInstance.get(
+      `/${year}/events?eventCode=${eventCode}`
+    );
+    return eventData.Events[0];
+  } catch {
+    throw new Error(`${eventCode} does not exist for the ${year} season.`);
+  }
 }
 
 export type FrcEvents_Teams = {

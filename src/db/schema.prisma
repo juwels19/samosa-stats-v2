@@ -19,6 +19,7 @@ model Event {
   endDate               String
   isComplete            Boolean @default(false)
   isSubmissionClosed    Boolean @default(false)
+  isCountdownActive     Boolean @default(false)
   numberOfTeamPicks     Int     @default(8)
   numberOfCategoryPicks Int     @default(5)
   Season                Season  @relation(fields: [seasonId], references: [id])

@@ -10,12 +10,14 @@ export const env = createEnv({
     FRC_EVENTS_API_TOKEN: z.string(),
     DISCORD_WEBHOOK_URL: z.string().url(),
     NODE_ENV: z.enum(["development", "test", "production"]),
+    TRIGGER_SECRET_KEY: z.string(),
   },
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
   },
   // For Next.js >= 13.4.4, you only need to destructure client variables:
   runtimeEnv: {
+    TRIGGER_SECRET_KEY: process.env.TRIGGER_SECRET_KEY,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,

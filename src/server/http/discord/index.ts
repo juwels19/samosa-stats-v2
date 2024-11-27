@@ -12,9 +12,12 @@ export type DiscordEmbedType = {
 const discordWebhookUrl = env.DISCORD_WEBHOOK_URL;
 const embedColor = "6316287";
 
-const sendDiscordMessage = async (embed: DiscordEmbedType) => {
+const sendDiscordMessage = async (
+  embed: DiscordEmbedType,
+  messageHeader: string
+) => {
   const body = {
-    content: "🚨Samosa Stats Submission Reminder🚨 @here",
+    content: `🚨Samosa Stats ${messageHeader}🚨 <@&1226682262070890587>`,
     embeds: [{ ...embed, color: embedColor }],
   };
 
@@ -37,5 +40,18 @@ export const sendEventSubmissionReminder = async ({
       "MMMM do"
     )}.\n\n[samosastats.com/picks/${eventCode}](https://samosastats.com/picks/${eventCode})`,
   };
-  await sendDiscordMessage(embed);
+  await sendDiscordMessage(embed, "Pick Submission Reminder");
+};
+
+export const sendEventSubmissionsClosedMessage = async ({
+  eventName,
+}: {
+  eventName: string;
+}) => {
+  const embed = {
+    title: `GATES ARE NOW CLOSED FOR ${eventName}!`,
+    description:
+      "If you didn't submit your picks, too bad...\n\n[samosastats.com](https://samosastats.com)",
+  };
+  await sendDiscordMessage(embed, "Event Submissions CLOSED");
 };

@@ -31,6 +31,7 @@ import { Loader2Icon } from "lucide-react";
 import { Season } from "@prisma/client";
 import { toast } from "sonner";
 import { parse } from "date-fns";
+import { closeEventSubmission } from "~/server/actions/trigger";
 
 const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
   const [isFetchingEnabled, setIsFetchingEnabled] = useState(false);
@@ -82,9 +83,15 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
       return data;
     },
     enabled: isFetchingEnabled,
+    retry: false,
   });
 
   useEffect(() => {
+    if (eventFetcher.error) {
+      toast.error(eventFetcher.error.message);
+      setIsFetchingEnabled(false);
+      return;
+    }
     newEventForm.setValue("eventName", eventFetcher.data?.name ?? undefined);
     newEventForm.setValue(
       "startDate",
@@ -95,7 +102,7 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
       new Date(eventFetcher.data?.dateEnd).toDateString()
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventFetcher.data]);
+  }, [eventFetcher.data, eventFetcher.error]);
 
   const newEventMutation = useMutation({
     mutationFn: (newEvent: {
@@ -136,6 +143,9 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
           numCategoryPicks: values.numCategoryPicks,
         },
       });
+      if (newEvent?.data.newEvent) {
+        await closeEventSubmission({ event: newEvent?.data.newEvent });
+      }
       toast.success(
         `${newEvent?.data.newEvent.eventCode} was created successfully!`
       );

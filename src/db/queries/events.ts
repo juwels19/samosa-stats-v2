@@ -107,3 +107,31 @@ export async function updateEvent({
     }
   }
 }
+
+export async function setEventCountdownActive({
+  eventId,
+}: {
+  eventId: number;
+}) {
+  try {
+    const updatedEvent = await prisma.event.update({
+      where: { id: eventId },
+      data: {
+        isCountdownActive: true,
+      },
+    });
+
+    return {
+      success: true,
+      data: { updatedEvent: JSON.stringify(updatedEvent) },
+    };
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      // The .code property can be accessed in a type-safe manner
+      console.log(e.code);
+      if (e.code === "P2002") {
+        throw new Error("Event does not exist.");
+      }
+    }
+  }
+}

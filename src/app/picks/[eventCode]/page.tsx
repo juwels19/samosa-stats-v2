@@ -1,7 +1,7 @@
-import Image from "next/image";
 import PickTabs from "~/app/picks/[eventCode]/_components/pick-tabs";
+import BlueAllianceLink from "~/components/common/external-links/blue-alliance";
+import StatboticsLink from "~/components/common/external-links/statbotics";
 import PageHeading from "~/components/common/page-heading";
-import { Button } from "~/components/ui/button";
 import { getCategoriesForActiveSeason } from "~/db/queries/categories";
 import { getEventByEventCode } from "~/db/queries/events";
 import { ROUTES } from "~/lib/routes";
@@ -37,40 +37,8 @@ const EventPickPage = async ({
           backButtonHref={ROUTES.DASHBOARD}
         />
         <div className="flex flex-col md:flex-row gap-2 items-start">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://statbotics.io/event/${event?.eventCode}`}
-          >
-            <Button
-              size="icon"
-              className="bg-white hover:bg-white dark:hover:bg-white"
-            >
-              <Image
-                src="/statbotics.svg"
-                alt="Statbotics logo"
-                width={30}
-                height={30}
-              />
-            </Button>
-          </a>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://thebluealliance.com/event/${event?.eventCode}`}
-          >
-            <Button
-              size="icon"
-              className="bg-[#44519b] dark:bg-[#44519b] hover:dark:bg-[#44519b] hover:bg-[#44519b]"
-            >
-              <Image
-                src="https://www.thebluealliance.com/images/tba_lamp.svg"
-                alt="The Blue Alliance logo"
-                width={15}
-                height={15}
-              />
-            </Button>
-          </a>
+          <StatboticsLink event={event} />
+          <BlueAllianceLink event={event} />
         </div>
       </div>
       {/* TAB CONTENT */}

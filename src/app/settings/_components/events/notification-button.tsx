@@ -15,7 +15,7 @@ const NotificationButton = ({ event }: { event: EventWithPicks }) => {
 
   const sendNotification = async () => {
     await sendEventSubmissionReminder({
-      eventName: event.displayName ?? event.name,
+      eventName: event.displayName || event.name,
       eventStartDate: event.startDate,
       eventCode: event.eventCode,
     });

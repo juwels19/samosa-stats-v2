@@ -6,6 +6,7 @@ import Link from "next/link";
 import React from "react";
 import EditEventForm from "~/app/settings/_components/events/edit-event-form";
 import NotificationButton from "~/app/settings/_components/events/notification-button";
+import EventCountdownTimer from "~/components/event-countdown-timer";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -38,7 +39,7 @@ const EventCard = ({
       <CardHeader className="grow">
         {/* overflow-hidden text-ellipsis whitespace-nowrap */}
         <CardTitle className="text-balance">
-          {event.displayName ?? event.name}
+          {event.displayName || event.name}
         </CardTitle>
         <CardDescription>
           <span className="font-semibold">{event.eventCode}</span>
@@ -48,22 +49,23 @@ const EventCard = ({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="flex flex-row gap-2">
-              <span className="font-semibold">Teams to pick:</span>
+              <span className="font-semibold">Teams:</span>
               <span>{event.numberOfTeamPicks}</span>
             </div>
             <div className="flex flex-row gap-2">
-              <span className="font-semibold">Categories to pick:</span>
+              <span className="font-semibold">Categories:</span>
               <span>{event.numberOfCategoryPicks}</span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 items-end">
-            {/* <span className="font-semibold">Time until gates close:</span> */}
-            {/* INSERT TIME LOGIC HERE */}
-            {/* <NumberFlow value={60} trend={-1} /> */}
-          </div>
+          {event.isCountdownActive && (
+            <div className="flex flex-col items-end">
+              <span className="font-semibold">Time to gate close:</span>
+              <EventCountdownTimer event={event} />
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter>
