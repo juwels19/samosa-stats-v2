@@ -174,18 +174,18 @@ const PickSubmission = () => {
               </FormItem>
             )}
           />
-          <Button
-            type="submit"
-            disabled={
-              submitPickForm.formState.isSubmitting || event.isSubmissionClosed
-            }
-            className="max-w-fit"
-          >
-            {submitPickForm.formState.isSubmitting && (
-              <Loader2Icon className="animate-spin" />
-            )}
-            Submit picks
-          </Button>
+          {!event.isSubmissionClosed && (
+            <Button
+              type="submit"
+              disabled={submitPickForm.formState.isSubmitting}
+              className="max-w-fit"
+            >
+              {submitPickForm.formState.isSubmitting && (
+                <Loader2Icon className="animate-spin" />
+              )}
+              Submit picks
+            </Button>
+          )}
         </form>
       </Form>
     </>

@@ -26,6 +26,7 @@ const menuItems = [{ label: "Dashboard", href: "/dashboard" }];
 
 const adminMenuItems = [
   { label: "Approvals", href: "/approvals" },
+  { label: "Scores", href: "/scores" },
   { label: "Settings", href: "/settings" },
 ];
 
@@ -83,10 +84,11 @@ const NavigationBar = ({
         {menuItems.map((menuItem) => (
           <Link key={`nav-item-${menuItem.href}`} href={menuItem.href}>
             <NavbarItem
-              isActive={pathname === menuItem.href}
+              isActive={pathname.includes(menuItem.href)}
               className={cn(
                 "p-2 rounded-md",
-                pathname === menuItem.href && "bg-slate-200 dark:bg-slate-800"
+                pathname.includes(menuItem.href) &&
+                  "bg-slate-200 dark:bg-slate-800"
               )}
             >
               {menuItem.label}
@@ -100,10 +102,10 @@ const NavigationBar = ({
                 href={menuItem.href}
               >
                 <NavbarItem
-                  isActive={pathname === menuItem.href}
+                  isActive={pathname.includes(menuItem.href)}
                   className={cn(
                     "p-2 rounded-md",
-                    pathname === menuItem.href &&
+                    pathname.includes(menuItem.href) &&
                       "bg-slate-200 dark:bg-slate-800"
                   )}
                 >

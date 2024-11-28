@@ -22,18 +22,45 @@ import { cn } from "~/lib/utils";
 
 const EventCard = ({
   event,
-  isAdminCard = false,
+  type,
 }: {
   event: EventWithPicks;
-  isAdminCard?: boolean;
+  type?: "admin" | "scoring" | undefined;
 }) => {
   const eventHasPicks = (event.Pick && event?.Pick?.length !== 0) || false;
+
+  const isAdminCard = type === "admin";
+  const isScoringCard = type === "scoring";
+
+  const renderNavigationLink = () => {
+    let linkText = "Submit Picks";
+    if (isScoringCard) {
+      linkText = "Submit Scores";
+    } else if (event.isSubmissionClosed) {
+      linkText = "View Picks";
+    }
+
+    return (
+      <Link
+        href={`${isScoringCard ? ROUTES.SCORES : ROUTES.PICKS}/${
+          event.eventCode
+        }`}
+      >
+        <Button variant="link" className="pr-0">
+          {linkText}
+          <MoveRightIcon />
+        </Button>
+      </Link>
+    );
+  };
 
   return (
     <Card
       className={cn(
         "flex flex-col",
-        eventHasPicks ? "bg-green-200/20 dark:bg-green-950/50" : ""
+        eventHasPicks && !isScoringCard
+          ? "bg-green-200/20 dark:bg-green-950/50"
+          : ""
       )}
     >
       <CardHeader className="grow">
@@ -60,7 +87,7 @@ const EventCard = ({
               <span>{event.numberOfCategoryPicks}</span>
             </div>
           </div>
-          {event.isCountdownActive && (
+          {event.isCountdownActive && !event.isComplete && (
             <div className="flex flex-col items-end">
               <span className="font-semibold">Time to gate close:</span>
               <EventCountdownTimer event={event} />
@@ -72,7 +99,9 @@ const EventCard = ({
         <div
           className={cn(
             "w-full flex flex-row justify-between",
-            isAdminCard || eventHasPicks ? "justify-between" : "justify-end"
+            isAdminCard || (eventHasPicks && !isScoringCard)
+              ? "justify-between"
+              : "justify-end"
           )}
         >
           {isAdminCard ? (
@@ -82,18 +111,13 @@ const EventCard = ({
             </>
           ) : (
             <>
-              {eventHasPicks && (
+              {eventHasPicks && !isScoringCard && (
                 <p className="inline-flex items-center gap-1">
                   <CheckIcon color="green" />
                   Pick submitted
                 </p>
               )}
-              <Link href={`${ROUTES.PICKS}/${event.eventCode}`}>
-                <Button variant="link">
-                  {!event.isSubmissionClosed ? "Submit Picks" : "View Picks"}
-                  <MoveRightIcon />
-                </Button>
-              </Link>
+              {renderNavigationLink()}
             </>
           )}
         </div>

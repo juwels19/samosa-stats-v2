@@ -4,4 +4,5 @@ export const ROUTES = {
   APPROVALS: "/approvals",
   SETTINGS: "/settings",
   PICKS: "/picks",
+  SCORES: "/scores",
 };

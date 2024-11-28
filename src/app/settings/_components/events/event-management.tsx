@@ -5,6 +5,7 @@ import NewEventForm from "~/app/settings/_components/events/new-event-form";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { getActiveSeason } from "~/db/queries/seasons";
+import { EventWithPicks } from "~/db/queries/events";
 
 const EventManagement = async () => {
   const activeSeason = await getActiveSeason({ includeEvents: true });
@@ -29,10 +30,10 @@ const EventManagement = async () => {
           </Alert>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {activeSeason?.Event.sort((a, b) =>
+          {activeSeason!.Event.sort((a, b) =>
             compareAsc(parseJSON(a.startDate), parseJSON(b.startDate))
-          ).map((event) => (
-            <EventCard key={event.eventCode} event={event} isAdminCard />
+          ).map((event: EventWithPicks) => (
+            <EventCard key={event.eventCode} event={event} type="admin" />
           ))}
         </div>
       </CardContent>

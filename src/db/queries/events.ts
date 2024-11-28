@@ -23,6 +23,22 @@ export async function getAllEventsAndPicksForUser(clerkId: string) {
   );
 }
 
+export async function getEventsReadyForScoring() {
+  const events = await prisma.event.findMany({
+    where: {
+      Season: { isActive: true },
+      isComplete: true,
+      isSubmissionClosed: true,
+    },
+    include: {
+      Pick: { include: { Categories: true } },
+    },
+  });
+  return events.sort((a, b) =>
+    compareAsc(parseJSON(a.startDate), parseJSON(b.startDate))
+  );
+}
+
 export async function getEventByEventCode(
   eventCode: string
 ): Promise<EventWithPicks | null> {
