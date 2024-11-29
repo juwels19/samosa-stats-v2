@@ -136,7 +136,7 @@ const NavigationBar = ({
         {menuItems.map((item, index) => (
           <NavbarMenuItem
             key={`${item}-${index}`}
-            isActive={pathname === item.href}
+            isActive={pathname.includes(item.href)}
           >
             <Link
               color={
@@ -148,7 +148,7 @@ const NavigationBar = ({
               }
               className={cn(
                 "px-2 py-1 rounded-md",
-                pathname === item.href && "bg-slate-200 dark:bg-slate-800"
+                pathname.includes(item.href) && "bg-slate-200 dark:bg-slate-800"
               )}
               href={item.href}
             >
@@ -160,7 +160,7 @@ const NavigationBar = ({
           ? adminMenuItems.map((item, index) => (
               <NavbarMenuItem
                 key={`${item}-${index}`}
-                isActive={pathname === item.href}
+                isActive={pathname.includes(item.href)}
               >
                 <Link
                   color={
@@ -172,7 +172,8 @@ const NavigationBar = ({
                   }
                   className={cn(
                     "px-2 py-1 rounded-md",
-                    pathname === item.href && "bg-slate-200 dark:bg-slate-800"
+                    pathname.includes(item.href) &&
+                      "bg-slate-200 dark:bg-slate-800"
                   )}
                   href={item.href}
                 >

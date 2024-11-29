@@ -3,7 +3,7 @@ import React from "react";
 import ScoreEntryForm from "~/app/scores/_components/score-entry-form";
 import PageHeading from "~/components/common/page-heading";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import { getCategoriesForActiveSeason } from "~/db/queries/categories";
+import { getCategoryCountsForEvent } from "~/db/queries/categories";
 import { getEventByEventCode } from "~/db/queries/events";
 import { ROUTES } from "~/lib/routes";
 
@@ -21,7 +21,7 @@ const EventScoreEntryPage = async ({
 
   const [event, seasonCategories] = await Promise.all([
     getEventByEventCode(eventCode),
-    getCategoriesForActiveSeason(),
+    getCategoryCountsForEvent(eventCode),
   ]);
 
   if (!event)
@@ -49,9 +49,13 @@ const EventScoreEntryPage = async ({
           To enter scores, select the winning team(s) from the dropdown for each
           category.
         </AlertDescription>
+        <AlertDescription>
+          NOTE: If a category name gets truncated, you can click on the name to
+          see the full category.
+        </AlertDescription>
       </Alert>
 
-      <ScoreEntryForm event={event} allCategories={seasonCategories} />
+      <ScoreEntryForm event={event} categories={seasonCategories} />
     </div>
   );
 };

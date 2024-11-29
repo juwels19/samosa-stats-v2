@@ -70,3 +70,30 @@ export async function submitPickForEvent({
     }
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const pickWithCategories = Prisma.validator<Prisma.PickDefaultArgs>()({
+  include: {
+    Categories: true,
+  },
+});
+
+export type PickWithCategories = Prisma.PickGetPayload<
+  typeof pickWithCategories
+>;
+
+export async function setPickScoresForEvent(picksWithScores: {
+  [key: string]: number;
+}) {
+  await prisma.$transaction(
+    Object.entries(picksWithScores).map(([pickId, score]) =>
+      prisma.pick.update({
+        where: {
+          id: parseInt(pickId),
+        },
+        data: { score: score },
+      })
+    )
+  );
+  return { success: true, data: {} };
+}

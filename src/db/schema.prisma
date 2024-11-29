@@ -33,6 +33,7 @@ model Pick {
   userFullname String
   displayName  String?
   answersJSON  String
+  score        Int?
   eventId      Int
   Event        Event      @relation(fields: [eventId], references: [id])
   Categories   Category[]

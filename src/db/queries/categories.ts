@@ -4,7 +4,6 @@ import { Category, Prisma } from "@prisma/client";
 import { formatISO } from "date-fns";
 import { revalidatePath } from "next/cache";
 import prisma from "~/db";
-import { getActiveSeason } from "~/db/queries/seasons";
 
 export async function getAllCategories() {
   const categories = await prisma.category.findMany({
@@ -14,11 +13,33 @@ export async function getAllCategories() {
 }
 
 export async function getCategoriesForActiveSeason() {
-  const activeSeason = await getActiveSeason();
-
   const categories = await prisma.category.findMany({
-    where: { seasonId: activeSeason!.id },
+    where: { Season: { isActive: true } },
   });
+  return categories;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const categoriesWithPickCounts = Prisma.validator<Prisma.CategoryDefaultArgs>()(
+  {
+    include: {
+      _count: { select: { Picks: true } },
+    },
+  }
+);
+
+export type CategoriesWithPickCounts = Prisma.CategoryGetPayload<
+  typeof categoriesWithPickCounts
+>;
+
+export async function getCategoryCountsForEvent(eventCode: string) {
+  const categories = await prisma.category.findMany({
+    where: { Season: { isActive: true } },
+    include: {
+      _count: { select: { Picks: { where: { Event: { eventCode } } } } },
+    },
+  });
+
   return categories;
 }
 
