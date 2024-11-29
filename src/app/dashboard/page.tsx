@@ -13,15 +13,29 @@ const DashboardPage = async () => {
   const user = await currentUser();
   const events = await getAllEventsAndPicksForUser(user!.id);
   const openEvents = events.filter(
-    (event) => !event.isComplete && !event.isSubmissionClosed
+    (event) => !event.isComplete && !event.isOngoing
   );
   const closedEvents = events.filter(
-    (event) => event.isComplete || event.isSubmissionClosed
+    (event) => event.isComplete && !event.isOngoing
+  );
+
+  const ongoingEvents = events.filter(
+    (event) => event.isOngoing && !event.isComplete
   );
 
   return (
     <div className="w-full p-6 flex flex-col gap-4">
       <H2>Dashboard</H2>
+      {ongoingEvents.length > 0 && (
+        <>
+          <H3>Ongoing Events</H3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+            {closedEvents.map((event) => (
+              <EventCard key={event.eventCode} event={event} />
+            ))}
+          </div>
+        </>
+      )}
       <H3>Open Events</H3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {openEvents.map((event) => (

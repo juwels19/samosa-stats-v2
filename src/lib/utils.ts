@@ -13,3 +13,10 @@ export function getEventGateCloseTime(startDate: string) {
     "America/Toronto"
   ).toISOString();
 }
+
+export function getEventCloseTime(startDate: string) {
+  return new TZDate(
+    addHours(startOfDay(addDays(startDate, 2)), 12),
+    "America/Toronto"
+  ).toISOString();
+}

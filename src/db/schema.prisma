@@ -18,6 +18,7 @@ model Event {
   startDate             String
   endDate               String
   isComplete            Boolean @default(false)
+  isOngoing             Boolean @default(false)
   isSubmissionClosed    Boolean @default(false)
   isCountdownActive     Boolean @default(false)
   numberOfTeamPicks     Int     @default(8)
@@ -33,6 +34,7 @@ model Pick {
   userFullname String
   displayName  String?
   answersJSON  String
+  isRandom     Boolean    @default(false)
   score        Int?
   eventId      Int
   Event        Event      @relation(fields: [eventId], references: [id])

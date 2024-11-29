@@ -1,19 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Season } from "@prisma/client";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { parse } from "date-fns";
+import { Loader2Icon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+
 import { Button } from "~/components/ui/button";
-import {
-  Form,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -23,19 +20,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createEvent } from "~/db/queries/events";
-import { fetchEventByYearAndCode } from "~/server/http/frc-events";
+import {
+  Form,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
-import { Loader2Icon } from "lucide-react";
-import { Season } from "@prisma/client";
-import { toast } from "sonner";
-import { parse } from "date-fns";
-import { closeEventSubmission } from "~/server/actions/trigger";
+import { createEvent } from "~/db/queries/events";
+import { closeEvent, closeEventSubmission } from "~/server/actions/trigger";
+import { fetchEventByYearAndCode } from "~/server/http/frc-events";
 
 const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
   const [isFetchingEnabled, setIsFetchingEnabled] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const newEventSchema = z.object({
     eventCode: z
@@ -121,6 +123,7 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
   });
 
   const handleFormSubmit = async (values: z.infer<typeof newEventSchema>) => {
+    setIsLoading(true);
     try {
       const newEvent = await newEventMutation.mutateAsync({
         eventData: {
@@ -144,7 +147,9 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
         },
       });
       if (newEvent?.data.newEvent) {
+        // These are just triggers to auto close the event submission and event
         await closeEventSubmission({ event: newEvent?.data.newEvent });
+        await closeEvent({ event: newEvent?.data.newEvent });
       }
       toast.success(
         `${newEvent?.data.newEvent.eventCode} was created successfully!`
@@ -154,6 +159,7 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
       const error = e as Error;
       toast.error(error.message);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -327,7 +333,10 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" disabled={newEventMutation.isPending}>
+              <Button
+                type="submit"
+                disabled={newEventMutation.isPending || isLoading}
+              >
                 {newEventMutation.isPending && (
                   <Loader2Icon className="animate-spin size-3" />
                 )}
