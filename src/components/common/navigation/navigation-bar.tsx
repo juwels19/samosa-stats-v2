@@ -25,10 +25,11 @@ const logo = "/SS_logo.png";
 const menuItems = [{ label: "Dashboard", href: "/dashboard" }];
 
 const adminMenuItems = [
-  { label: "Approvals", href: "/approvals" },
   { label: "Scores", href: "/scores" },
   { label: "Settings", href: "/settings" },
 ];
+
+const approverMenuItems = [{ label: "Approvals", href: "/approvals" }];
 
 const NavigationBar = ({
   clerkUserMetadata,
@@ -98,6 +99,25 @@ const NavigationBar = ({
               </NavbarItem>
             </Link>
           ))}
+        {clerkUserMetadata?.approver && pathname !== "/"
+          ? approverMenuItems.map((menuItem) => (
+              <Link
+                key={`admin-nav-item-${menuItem.href}`}
+                href={menuItem.href}
+              >
+                <NavbarItem
+                  isActive={pathname.includes(menuItem.href)}
+                  className={cn(
+                    "p-2 rounded-md",
+                    pathname.includes(menuItem.href) &&
+                      "bg-slate-200 dark:bg-slate-800"
+                  )}
+                >
+                  {menuItem.label}
+                </NavbarItem>
+              </Link>
+            ))
+          : null}
         {clerkUserMetadata?.admin && pathname !== "/"
           ? adminMenuItems.map((menuItem) => (
               <Link
@@ -161,6 +181,32 @@ const NavigationBar = ({
               </Link>
             </NavbarMenuItem>
           ))}
+        {clerkUserMetadata?.approver && pathname !== "/"
+          ? approverMenuItems.map((item, index) => (
+              <NavbarMenuItem
+                key={`${item}-${index}`}
+                isActive={pathname.includes(item.href)}
+              >
+                <Link
+                  color={
+                    index === 2
+                      ? "primary"
+                      : index === menuItems.length - 1
+                      ? "danger"
+                      : "foreground"
+                  }
+                  className={cn(
+                    "px-2 py-1 rounded-md",
+                    pathname.includes(item.href) &&
+                      "bg-slate-200 dark:bg-slate-800"
+                  )}
+                  href={item.href}
+                >
+                  {item.label}
+                </Link>
+              </NavbarMenuItem>
+            ))
+          : null}
         {clerkUserMetadata?.admin && pathname !== "/"
           ? adminMenuItems.map((item, index) => (
               <NavbarMenuItem

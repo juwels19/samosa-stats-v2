@@ -91,7 +91,11 @@ export const ApprovedActionMenu = ({ user }: { user: ClerkUser }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          disabled={!clerkUser || user.clerkId === clerkUser.id}
+          disabled={
+            !clerkUser ||
+            user.clerkId === clerkUser.id ||
+            clerkUser.publicMetadata.role !== "admin"
+          }
           onClick={(e) => {
             e.preventDefault();
             toggleAdminMutation.mutate();
