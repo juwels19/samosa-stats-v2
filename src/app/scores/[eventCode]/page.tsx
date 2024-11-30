@@ -1,10 +1,12 @@
 import { InfoIcon } from "lucide-react";
 import React from "react";
 import ScoreEntryForm from "~/app/scores/_components/score-entry-form";
+import TeamFrequencyBreakdown from "~/app/scores/_components/team-frequency-breakdown/team-frequency-breakdown";
 import PageHeading from "~/components/common/page-heading";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { getCategoryCountsForEvent } from "~/db/queries/categories";
 import { getEventByEventCode } from "~/db/queries/events";
+import { getTeamPickCountsForEvent } from "~/db/queries/picks";
 import { ROUTES } from "~/lib/routes";
 
 export const metadata = {
@@ -24,6 +26,12 @@ const EventScoreEntryPage = async ({
     getCategoryCountsForEvent(eventCode),
   ]);
 
+  const teamPickCount = await getTeamPickCountsForEvent(event!.id);
+  const numberOfPicks = event?.Pick.length;
+
+  console.log(teamPickCount);
+  console.log(numberOfPicks);
+
   if (!event)
     return (
       <Alert variant="destructive" className="mt-10">
@@ -42,7 +50,7 @@ const EventScoreEntryPage = async ({
         hasBackButton
         backButtonHref={ROUTES.SCORES}
       />
-      <Alert variant="info">
+      <Alert variant="info" className="mb-2">
         <InfoIcon />
         <AlertTitle>Heads up!</AlertTitle>
         <AlertDescription>
@@ -54,8 +62,8 @@ const EventScoreEntryPage = async ({
           see the full category.
         </AlertDescription>
       </Alert>
-
       <ScoreEntryForm event={event} categories={seasonCategories} />
+      <TeamFrequencyBreakdown data={teamPickCount} />
     </div>
   );
 };

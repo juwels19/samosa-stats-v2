@@ -4,6 +4,30 @@ import { Prisma } from "@prisma/client";
 import { formatISO } from "date-fns";
 import prisma from "~/db";
 
+export async function getTeamPickCountsForEvent(eventId: number): Promise<{
+  [key: number]: number;
+}> {
+  const picks = await prisma.pick.findMany({
+    where: { Event: { id: eventId } },
+  });
+
+  const teamPickCount: { [key: number]: number } = {};
+
+  picks.forEach((pick) => {
+    const parsedPick = JSON.parse(pick.answersJSON);
+
+    parsedPick.teams.forEach((teamNumber: number) => {
+      if (teamPickCount[teamNumber]) {
+        teamPickCount[teamNumber] += 1;
+      } else {
+        teamPickCount[teamNumber] = 1;
+      }
+    });
+  });
+
+  return teamPickCount;
+}
+
 export async function submitPickForEvent({
   eventId,
   userId,

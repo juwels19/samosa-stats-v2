@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import MultiSelector, { Option } from "~/components/ui/multi-selector";
-import { Skeleton } from "~/components/ui/skeleton";
 import { EventWithPicks } from "~/db/queries/events";
 import { fetchTeamsForEvent } from "~/server/http/frc-events";
 
@@ -32,6 +31,8 @@ import { toast } from "sonner";
 import { setPickScoresForEvent } from "~/db/queries/picks";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "~/lib/routes";
+import ScoreEntryFormLoading from "~/app/scores/_components/score-entry-form-loading";
+import { H4 } from "~/components/ui/typography";
 
 const ScoreEntryForm = ({
   event,
@@ -81,27 +82,7 @@ const ScoreEntryForm = ({
     },
   });
 
-  if (teamFetcher.isLoading)
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div className="flex flex-col gap-2">
-          <Skeleton className="h-4 w-48 md:w-72 lg:w-96 mt-2" />
-          <Skeleton className="h-10 w-1/2" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Skeleton className="h-4 w-48 md:w-72 lg:w-96 mt-2" />
-          <Skeleton className="h-10 w-1/2" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Skeleton className="h-4 w-48 md:w-72 lg:w-96 mt-2" />
-          <Skeleton className="h-10 w-1/2" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Skeleton className="h-4 w-48 md:w-72 lg:w-96 mt-2" />
-          <Skeleton className="h-10 w-1/2" />
-        </div>
-      </div>
-    );
+  if (teamFetcher.isLoading) return <ScoreEntryFormLoading />;
 
   if (!teamFetcher.data || teamFetcher.error)
     return (
@@ -164,7 +145,7 @@ const ScoreEntryForm = ({
   };
 
   // Need the following on this page:
-  // 1. Number of unique teams picked?
+  // 1. Number of unique teams picked
   // 2. Number of people participating
   // 3. Most picked team
 
@@ -174,7 +155,10 @@ const ScoreEntryForm = ({
         className="w-full"
         onSubmit={scoresForm.handleSubmit(handleScoreSubmission)}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mb-6">
+          <div className="col-span-1 md:col-span-2">
+            <H4>Total picks: {event.Pick.length}</H4>
+          </div>
           {categories.map((category) => (
             <div
               className="w-full flex flex-row gap-2 items-start"
