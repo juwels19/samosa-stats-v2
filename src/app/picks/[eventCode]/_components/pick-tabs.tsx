@@ -40,6 +40,10 @@ const PickTabs = ({
       : {}
   );
 
+  const userHasRandomPick =
+    event.Pick.length > 0 &&
+    event.Pick.find((pick) => pick.isRandom) !== undefined;
+
   return (
     <PickContext.Provider
       value={{
@@ -52,15 +56,23 @@ const PickTabs = ({
       }}
     >
       <Tabs
-        defaultValue={event.isSubmissionClosed ? "submit" : "teams"}
+        defaultValue={
+          event.isSubmissionClosed || userHasRandomPick ? "submit" : "teams"
+        }
         className="w-full"
       >
         <div className="w-full flex flex-row justify-center md:justify-start">
           <TabsList>
-            <TabsTrigger value="teams" disabled={event.isSubmissionClosed}>
+            <TabsTrigger
+              value="teams"
+              disabled={event.isSubmissionClosed || userHasRandomPick}
+            >
               Teams
             </TabsTrigger>
-            <TabsTrigger value="categories" disabled={event.isSubmissionClosed}>
+            <TabsTrigger
+              value="categories"
+              disabled={event.isSubmissionClosed || userHasRandomPick}
+            >
               Categories
             </TabsTrigger>
             <TabsTrigger value="submit">Submit</TabsTrigger>

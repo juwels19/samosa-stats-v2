@@ -31,7 +31,7 @@ const EventPickPage = async ({
       <div className="flex flex-row gap-4 justify-between">
         <PageHeading
           label={`${eventCode.slice(0, 4)} - ${
-            event?.displayName ?? event!.name
+            event.displayName || event.name
           }`}
           hasBackButton
           backButtonHref={ROUTES.DASHBOARD}

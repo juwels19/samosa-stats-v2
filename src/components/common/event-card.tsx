@@ -32,11 +32,17 @@ const EventCard = ({
   const isAdminCard = type === "admin";
   const isScoringCard = type === "scoring";
 
+  const userHasRandomPick =
+    event.Pick.length > 0 &&
+    event.Pick.find((pick) => pick.isRandom) !== undefined;
+
   const renderNavigationLink = () => {
     let linkText = "Submit Picks";
     if (isScoringCard) {
       linkText = "Submit Scores";
-    } else if (event.isSubmissionClosed) {
+    } else if (event.isOngoing && !eventHasPicks && !userHasRandomPick) {
+      linkText = "Submit Random Picks";
+    } else if (event.isComplete || (event.isOngoing && eventHasPicks)) {
       linkText = "View Picks";
     }
 
@@ -87,7 +93,7 @@ const EventCard = ({
               <span>{event.numberOfCategoryPicks}</span>
             </div>
           </div>
-          {event.isCountdownActive && !event.isComplete && (
+          {event.isCountdownActive && !event.isComplete && !event.isOngoing && (
             <div className="flex flex-col items-end">
               <span className="font-semibold">Time to gate close:</span>
               <EventCountdownTimer event={event} />
@@ -114,7 +120,9 @@ const EventCard = ({
               {eventHasPicks && !isScoringCard && (
                 <p className="inline-flex items-center gap-1">
                   <CheckIcon color="green" />
-                  Pick submitted
+                  {userHasRandomPick
+                    ? "Random pick submitted"
+                    : "Pick submitted"}
                 </p>
               )}
               {renderNavigationLink()}

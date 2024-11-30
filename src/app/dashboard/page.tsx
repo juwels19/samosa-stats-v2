@@ -1,6 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server";
+import { InfoIcon } from "lucide-react";
 import React from "react";
 import EventCard from "~/components/common/event-card";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { H2, H3 } from "~/components/ui/typography";
 import { getAllEventsAndPicksForUser } from "~/db/queries/events";
 
@@ -18,7 +20,6 @@ const DashboardPage = async () => {
   const closedEvents = events.filter(
     (event) => event.isComplete && !event.isOngoing
   );
-
   const ongoingEvents = events.filter(
     (event) => event.isOngoing && !event.isComplete
   );
@@ -29,8 +30,15 @@ const DashboardPage = async () => {
       {ongoingEvents.length > 0 && (
         <>
           <H3>Ongoing Events</H3>
+          <Alert variant="info">
+            <InfoIcon />
+            <AlertTitle>{`You're in luck!`}</AlertTitle>
+            <AlertDescription>
+              {`Late submissions are ALLOWED for ongoing events... However they must be RANDOM.`}
+            </AlertDescription>
+          </Alert>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
-            {closedEvents.map((event) => (
+            {ongoingEvents.map((event) => (
               <EventCard key={event.eventCode} event={event} />
             ))}
           </div>

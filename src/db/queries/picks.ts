@@ -12,6 +12,7 @@ export async function submitPickForEvent({
   categoryIds,
   categories,
   displayName,
+  isRandom,
 }: {
   eventId: number;
   userId: string;
@@ -20,6 +21,7 @@ export async function submitPickForEvent({
   categoryIds: string[];
   categories: string[];
   displayName: string;
+  isRandom: boolean;
 }) {
   const timestamp = formatISO(new Date());
   try {
@@ -39,6 +41,7 @@ export async function submitPickForEvent({
         userId: userId,
         userFullname,
         displayName,
+        isRandom,
         Event: { connect: { id: eventId } },
         Categories: {
           connect: categoryIds.map((id: string) => ({
@@ -53,6 +56,7 @@ export async function submitPickForEvent({
         }),
         userFullname,
         displayName,
+        isRandom,
         Categories: {
           set: [],
           connect: categoryIds.map((id: string) => ({
