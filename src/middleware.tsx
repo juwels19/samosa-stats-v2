@@ -9,21 +9,20 @@ const isApproverRoute = createRouteMatcher(["/approvals"]);
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
+    const userRole = (await auth()).sessionClaims?.metadata.role;
+    if (
+      (isApproverRoute(request) && userRole !== "admin") ||
+      userRole !== "admin"
+    ) {
+      const url = new URL("/dashboard?error=unauthorized", request.url);
+      return NextResponse.redirect(url);
+    }
+
+    if (isAdminRoute(request) && userRole !== "admin") {
+      const url = new URL("/dashboard?error=unauthorized", request.url);
+      return NextResponse.redirect(url);
+    }
     await auth.protect();
-  }
-  const userRole = (await auth()).sessionClaims?.metadata.role;
-
-  if (
-    (isApproverRoute(request) && userRole !== "admin") ||
-    userRole !== "admin"
-  ) {
-    const url = new URL("/dashboard?error=unauthorized", request.url);
-    return NextResponse.redirect(url);
-  }
-
-  if (isAdminRoute(request) && userRole !== "admin") {
-    const url = new URL("/dashboard?error=unauthorized", request.url);
-    return NextResponse.redirect(url);
   }
 });
 
