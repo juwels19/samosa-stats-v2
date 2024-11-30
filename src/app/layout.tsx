@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Providers from "~/providers";
 import { Toaster } from "sonner";
 import Navigation from "~/components/common/navigation/navigation";
+import { ROUTES } from "~/lib/routes";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +34,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      signInForceRedirectUrl={ROUTES.DASHBOARD}
+      signUpForceRedirectUrl={ROUTES.DASHBOARD}
+    >
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}

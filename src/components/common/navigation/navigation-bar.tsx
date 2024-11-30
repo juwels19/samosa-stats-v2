@@ -48,6 +48,8 @@ const NavigationBar = ({
     setIsMenuOpen(false);
   }, [pathname]);
 
+  if (!pathname) return null;
+
   return (
     <Navbar
       isBlurred
@@ -81,21 +83,22 @@ const NavigationBar = ({
         justify="center"
         className="hidden md:inline-flex flex-row gap-2"
       >
-        {menuItems.map((menuItem) => (
-          <Link key={`nav-item-${menuItem.href}`} href={menuItem.href}>
-            <NavbarItem
-              isActive={pathname.includes(menuItem.href)}
-              className={cn(
-                "p-2 rounded-md",
-                pathname.includes(menuItem.href) &&
-                  "bg-slate-200 dark:bg-slate-800"
-              )}
-            >
-              {menuItem.label}
-            </NavbarItem>
-          </Link>
-        ))}
-        {clerkUserMetadata?.admin
+        {pathname !== "/" &&
+          menuItems.map((menuItem) => (
+            <Link key={`nav-item-${menuItem.href}`} href={menuItem.href}>
+              <NavbarItem
+                isActive={pathname.includes(menuItem.href)}
+                className={cn(
+                  "p-2 rounded-md",
+                  pathname.includes(menuItem.href) &&
+                    "bg-slate-200 dark:bg-slate-800"
+                )}
+              >
+                {menuItem.label}
+              </NavbarItem>
+            </Link>
+          ))}
+        {clerkUserMetadata?.admin && pathname !== "/"
           ? adminMenuItems.map((menuItem) => (
               <Link
                 key={`admin-nav-item-${menuItem.href}`}
@@ -133,30 +136,32 @@ const NavigationBar = ({
         </SignedOut>
       </NavbarContent>
       <NavbarMenu className="bg-slate-50 dark:bg-gray-950">
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem
-            key={`${item}-${index}`}
-            isActive={pathname.includes(item.href)}
-          >
-            <Link
-              color={
-                index === 2
-                  ? "primary"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              className={cn(
-                "px-2 py-1 rounded-md",
-                pathname.includes(item.href) && "bg-slate-200 dark:bg-slate-800"
-              )}
-              href={item.href}
+        {pathname !== "/" &&
+          menuItems.map((item, index) => (
+            <NavbarMenuItem
+              key={`${item}-${index}`}
+              isActive={pathname.includes(item.href)}
             >
-              {item.label}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-        {clerkUserMetadata?.admin
+              <Link
+                color={
+                  index === 2
+                    ? "primary"
+                    : index === menuItems.length - 1
+                    ? "danger"
+                    : "foreground"
+                }
+                className={cn(
+                  "px-2 py-1 rounded-md",
+                  pathname.includes(item.href) &&
+                    "bg-slate-200 dark:bg-slate-800"
+                )}
+                href={item.href}
+              >
+                {item.label}
+              </Link>
+            </NavbarMenuItem>
+          ))}
+        {clerkUserMetadata?.admin && pathname !== "/"
           ? adminMenuItems.map((item, index) => (
               <NavbarMenuItem
                 key={`${item}-${index}`}

@@ -144,11 +144,6 @@ const ScoreEntryForm = ({
     }
   };
 
-  // Need the following on this page:
-  // 1. Number of unique teams picked
-  // 2. Number of people participating
-  // 3. Most picked team
-
   return (
     <Form {...scoresForm}>
       <form

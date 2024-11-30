@@ -3,10 +3,16 @@ import { Button } from "~/components/ui/button";
 import Image from "next/image";
 import SamosaIcon from "~/components/ui/samosa-icon";
 import { Skeleton } from "~/components/ui/skeleton";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 const hero = "/hero.png";
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+
+  if (user) redirect("/dashboard");
+
   return (
     <div className="container px-4 md:px-6 lg:px-10 py-4 self-center">
       <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
