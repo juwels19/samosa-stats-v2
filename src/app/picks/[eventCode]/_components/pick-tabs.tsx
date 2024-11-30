@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { Category } from "@prisma/client";
 import React, { useState } from "react";
 import CategoryPicker from "~/app/picks/[eventCode]/_components/category-picker";
@@ -16,7 +17,11 @@ const PickTabs = ({
   event: EventWithPicks;
   categories: Category[];
 }) => {
-  const parsedPickData = event.Pick.map((pick) => JSON.parse(pick.answersJSON));
+  const { user } = useUser();
+
+  const userPicks = event?.Pick.filter((pick) => pick.userId === user?.id);
+
+  const parsedPickData = userPicks.map((pick) => JSON.parse(pick.answersJSON));
 
   const [teamSelections, setTeamSelections] = useState(
     parsedPickData.length > 0
@@ -30,9 +35,9 @@ const PickTabs = ({
   );
 
   const [categorySelections, setCategorySelections] = useState(
-    event?.Pick[0]?.Categories.length > 0
+    userPicks[0]?.Categories.length > 0
       ? Object.fromEntries(
-          event.Pick[0].Categories.map((category: Category) => [
+          userPicks[0].Categories.map((category: Category) => [
             category.id,
             true,
           ])
@@ -41,8 +46,8 @@ const PickTabs = ({
   );
 
   const userHasRandomPick =
-    event.Pick.length > 0 &&
-    event.Pick.find((pick) => pick.isRandom) !== undefined;
+    userPicks.length > 0 &&
+    userPicks.find((pick) => pick.isRandom) !== undefined;
 
   return (
     <PickContext.Provider

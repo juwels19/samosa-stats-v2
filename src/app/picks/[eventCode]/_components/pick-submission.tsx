@@ -52,12 +52,16 @@ const PickSubmission = () => {
     setCategorySelections,
   } = useContext(PickContext);
 
+  const userPicks = event?.Pick.filter((pick) => pick.userId === user?.id);
+
   const [userHasRandomPick, setUserHasRandomPick] = useState(
-    event.Pick.length > 0 &&
-      event.Pick.find((pick) => pick.isRandom) !== undefined
+    userPicks.filter((pick) => pick.userId === user?.id).length > 0 &&
+      userPicks
+        .filter((pick) => pick.userId === user?.id)
+        .find((pick) => pick.isRandom) !== undefined
   );
 
-  const eventHasPicks = event.Pick.length > 0;
+  const eventHasPicks = userPicks.length > 0;
 
   const teamFetcher = useQuery({
     queryKey: ["teams", event.eventCode],
@@ -96,7 +100,7 @@ const PickSubmission = () => {
       categoryIds: Object.keys(categorySelections).filter(
         (categoryId) => categorySelections[categoryId]
       ),
-      displayName: event.Pick[0]?.displayName ?? "",
+      displayName: userPicks[0]?.displayName ?? "",
       isRandom: false,
     },
   });
@@ -108,7 +112,13 @@ const PickSubmission = () => {
       submitPickForEvent({
         ...formData,
         isRandom: formData.isRandom,
-        categories: filteredCategories.map((category) => category.text),
+        categories: formData.isRandom
+          ? categories
+              .filter((category) =>
+                formData.categoryIds.includes(category.id.toString())
+              )
+              .map((category) => category.text)
+          : filteredCategories.map((category) => category.text),
         userId: user!.id,
         userFullname: user!.firstName + user!.lastName,
         eventId: event.id,

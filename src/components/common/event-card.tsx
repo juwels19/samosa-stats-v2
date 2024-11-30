@@ -33,6 +33,7 @@ const EventCard = ({
   const isScoringCard = type === "scoring";
 
   const userHasRandomPick =
+    event?.Pick &&
     event.Pick.length > 0 &&
     event.Pick.find((pick) => pick.isRandom) !== undefined;
 

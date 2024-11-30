@@ -337,7 +337,7 @@ const NewEventForm = ({ activeSeason }: { activeSeason: Season | null }) => {
                 type="submit"
                 disabled={newEventMutation.isPending || isLoading}
               >
-                {newEventMutation.isPending && (
+                {(newEventMutation.isPending || isLoading) && (
                   <Loader2Icon className="animate-spin size-3" />
                 )}
                 Save
