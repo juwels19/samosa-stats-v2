@@ -56,9 +56,9 @@ const DashboardPage = async ({
         </Alert>
       )}
       <H2>Dashboard</H2>
-      {ongoingEvents.length > 0 &&
-        openEvents.length > 0 &&
-        closedEvents.length > 0 && <H3>Nothing to see here yet...</H3>}
+      {ongoingEvents.length === 0 &&
+        openEvents.length === 0 &&
+        closedEvents.length === 0 && <H3>Nothing to see here yet...</H3>}
       {ongoingEvents.length > 0 && (
         <>
           <H3>Ongoing Events</H3>
