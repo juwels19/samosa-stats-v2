@@ -3,6 +3,7 @@
 import { ThemeProvider } from "next-themes";
 
 import { NextUIProvider } from "@nextui-org/react";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import {
   isServer,
   QueryClient,
@@ -37,9 +38,13 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <NextUIProvider>
-        <ThemeProvider attribute="class">
-          <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
-        </ThemeProvider>
+        <NuqsAdapter>
+          <ThemeProvider attribute="class">
+            <ReactQueryStreamedHydration>
+              {children}
+            </ReactQueryStreamedHydration>
+          </ThemeProvider>
+        </NuqsAdapter>
       </NextUIProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

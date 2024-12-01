@@ -85,6 +85,7 @@ const NavigationBar = ({
         className="hidden md:inline-flex flex-row gap-2"
       >
         {pathname !== "/" &&
+          clerkUserMetadata?.approved &&
           menuItems.map((menuItem) => (
             <Link key={`nav-item-${menuItem.href}`} href={menuItem.href}>
               <NavbarItem
@@ -99,7 +100,9 @@ const NavigationBar = ({
               </NavbarItem>
             </Link>
           ))}
-        {clerkUserMetadata?.approver && pathname !== "/"
+        {clerkUserMetadata?.approver &&
+        clerkUserMetadata?.approved &&
+        pathname !== "/"
           ? approverMenuItems.map((menuItem) => (
               <Link
                 key={`admin-nav-item-${menuItem.href}`}
@@ -118,7 +121,9 @@ const NavigationBar = ({
               </Link>
             ))
           : null}
-        {clerkUserMetadata?.admin && pathname !== "/"
+        {clerkUserMetadata?.admin &&
+        clerkUserMetadata?.approved &&
+        pathname !== "/"
           ? adminMenuItems.map((menuItem) => (
               <Link
                 key={`admin-nav-item-${menuItem.href}`}
@@ -157,6 +162,7 @@ const NavigationBar = ({
       </NavbarContent>
       <NavbarMenu className="bg-slate-50 dark:bg-gray-950">
         {pathname !== "/" &&
+          clerkUserMetadata?.approved &&
           menuItems.map((item, index) => (
             <NavbarMenuItem
               key={`${item}-${index}`}
@@ -181,7 +187,9 @@ const NavigationBar = ({
               </Link>
             </NavbarMenuItem>
           ))}
-        {clerkUserMetadata?.approver && pathname !== "/"
+        {clerkUserMetadata?.approver &&
+        pathname !== "/" &&
+        clerkUserMetadata?.approved
           ? approverMenuItems.map((item, index) => (
               <NavbarMenuItem
                 key={`${item}-${index}`}
@@ -207,7 +215,9 @@ const NavigationBar = ({
               </NavbarMenuItem>
             ))
           : null}
-        {clerkUserMetadata?.admin && pathname !== "/"
+        {clerkUserMetadata?.admin &&
+        pathname !== "/" &&
+        clerkUserMetadata?.approved
           ? adminMenuItems.map((item, index) => (
               <NavbarMenuItem
                 key={`${item}-${index}`}

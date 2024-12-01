@@ -11,9 +11,16 @@ export const metadata = {
   description: "Samosa stats dashboard page",
 };
 
-const DashboardPage = async () => {
+const DashboardPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
   const user = await currentUser();
   const events = await getAllEventsAndPicksForUser(user!.id);
+
+  const error = (await searchParams).error;
+
   const openEvents = events.filter(
     (event) => !event.isComplete && !event.isOngoing
   );
@@ -24,8 +31,25 @@ const DashboardPage = async () => {
     (event) => event.isOngoing && !event.isComplete
   );
 
+  if (!user?.privateMetadata.approved)
+    return (
+      <div className="w-full m-6 p-6 flex flex-col items-center justify-center gap-4">
+        <H2>You are not approved yet!</H2>
+        <H3>{`Once you're approved, you'll be able to access all the Samosa Stats degeneracy!`}</H3>
+      </div>
+    );
+
   return (
     <div className="w-full p-6 flex flex-col gap-4">
+      {error && error === "unauthorized" && (
+        <Alert variant="destructive">
+          <InfoIcon />
+          <AlertTitle>Nice try!</AlertTitle>
+          <AlertDescription>
+            You are not authorized to view that page
+          </AlertDescription>
+        </Alert>
+      )}
       <H2>Dashboard</H2>
       {ongoingEvents.length > 0 && (
         <>
