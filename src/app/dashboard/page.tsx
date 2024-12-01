@@ -56,6 +56,9 @@ const DashboardPage = async ({
         </Alert>
       )}
       <H2>Dashboard</H2>
+      {ongoingEvents.length > 0 &&
+        openEvents.length > 0 &&
+        closedEvents.length > 0 && <H3>Nothing to see here yet...</H3>}
       {ongoingEvents.length > 0 && (
         <>
           <H3>Ongoing Events</H3>
@@ -73,12 +76,17 @@ const DashboardPage = async ({
           </div>
         </>
       )}
-      <H3>Open Events</H3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
-        {openEvents.map((event) => (
-          <EventCard key={event.eventCode} event={event} />
-        ))}
-      </div>
+      {openEvents.length > 0 && (
+        <>
+          <H3>Open Events</H3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+            {openEvents.map((event) => (
+              <EventCard key={event.eventCode} event={event} />
+            ))}
+          </div>
+        </>
+      )}
+
       {closedEvents.length > 0 && (
         <>
           <H3>Closed Events</H3>
