@@ -21,7 +21,7 @@ export type ClerkUser = {
 
 export async function getClerkUsers(): Promise<ClerkUser[]> {
   // @ts-expect-error - this is a bug in the types
-  const allUsers = await clerkClient.users.getUserList();
+  const allUsers = await clerkClient.users.getUserList({ limit: 100 });
 
   const userData: ClerkUser[] = [];
 
