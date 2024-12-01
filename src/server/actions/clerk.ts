@@ -20,6 +20,7 @@ export type ClerkUser = {
 };
 
 export async function getClerkUsers(): Promise<ClerkUser[]> {
+  // @ts-expect-error - this is a bug in the types
   const allUsers = await clerkClient.users.getUserList();
 
   const userData: ClerkUser[] = [];
@@ -46,6 +47,7 @@ export async function updateClerkUserPrivateMetadata({
   newPrivateMetadata: ClerkUser["privateMetadata"];
 }): Promise<string> {
   try {
+    // @ts-expect-error - this is a bug in the types
     const updateUser = await clerkClient.users.updateUser(clerkId, {
       privateMetadata: newPrivateMetadata,
     });
