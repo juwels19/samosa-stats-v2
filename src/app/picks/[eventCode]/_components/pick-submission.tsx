@@ -120,7 +120,10 @@ const PickSubmission = () => {
               .map((category) => category.text)
           : filteredCategories.map((category) => category.text),
         userId: user!.id,
-        userFullname: user!.firstName + user!.lastName,
+        userFullname:
+          user?.firstName && user?.lastName
+            ? `${user!.firstName} ${user!.lastName}`
+            : "",
         eventId: event.id,
       }),
   });
