@@ -1,7 +1,7 @@
 "use server";
 
 import { Event } from "@prisma/client";
-import { metadata, tasks } from "@trigger.dev/sdk/v3";
+import { tasks } from "@trigger.dev/sdk/v3";
 import type { closeEventSubmissionTask } from "~/trigger/close-event-submission";
 import { EventWithPicks, setEventCountdownActive } from "~/db/queries/events";
 import { revalidatePath } from "next/cache";
