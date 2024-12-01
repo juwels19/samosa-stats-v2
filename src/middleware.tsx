@@ -3,20 +3,15 @@ import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher(["/dashboard", "/"]);
 
-const isAdminRoute = createRouteMatcher(["/scores(.*)", "/settings(.*)"]);
-
-const isApproverRoute = createRouteMatcher(["/approvals"]);
+const isAdminRoute = createRouteMatcher([
+  "/scores(.*)",
+  "/settings(.*)",
+  "/approvals",
+]);
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
     const userRole = (await auth()).sessionClaims?.metadata.role;
-    if (
-      (isApproverRoute(request) && userRole !== "admin") ||
-      userRole !== "admin"
-    ) {
-      const url = new URL("/dashboard?error=unauthorized", request.url);
-      return NextResponse.redirect(url);
-    }
 
     if (isAdminRoute(request) && userRole !== "admin") {
       const url = new URL("/dashboard?error=unauthorized", request.url);
