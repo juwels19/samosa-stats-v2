@@ -60,10 +60,12 @@ const NavigationBar = ({
       maxWidth="full"
     >
       <NavbarContent>
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="md:hidden"
-        />
+        {pathname !== "/" && (
+          <NavbarMenuToggle
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            className="md:hidden"
+          />
+        )}
         <NavbarBrand>
           <Link href="/" className="flex items-center gap-2">
             <Image
