@@ -32,7 +32,7 @@ const UserManagement = async () => {
       <TabsContent value="approved" className="mt-4">
         <DataTable
           columns={approvedTableColumns}
-          data={users.filter((user) => user.privateMetadata.approved)}
+          data={users.filter((user) => !user.privateMetadata.rejected)}
         />
       </TabsContent>
       {isSignedInUserApprover ? (
