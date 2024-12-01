@@ -10,6 +10,8 @@ import { currentUser } from "@clerk/nextjs/server";
 const UserManagement = async () => {
   const users = await getClerkUsers();
 
+  console.log("user management = ", users);
+
   const signedInUser = await currentUser();
 
   const isSignedInUserApprover = signedInUser?.privateMetadata.approver;
@@ -32,7 +34,7 @@ const UserManagement = async () => {
       <TabsContent value="approved" className="mt-4">
         <DataTable
           columns={approvedTableColumns}
-          data={users.filter((user) => !user.privateMetadata.rejected)}
+          data={users.filter((user) => user.privateMetadata.approved)}
         />
       </TabsContent>
       {isSignedInUserApprover ? (
