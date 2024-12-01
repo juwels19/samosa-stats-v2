@@ -1,4 +1,4 @@
-// import { TZDate } from "@date-fns/tz";
+import { TZDate } from "@date-fns/tz";
 
 import { clsx, type ClassValue } from "clsx";
 import { addHours, startOfDay, addDays } from "date-fns";
@@ -9,11 +9,17 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getEventGateCloseTime(startDate: string) {
-  return addHours(startOfDay(addDays(startDate, 1)), 9).toISOString();
+  return addHours(
+    startOfDay(addDays(new TZDate(startDate, "America/Toronto"), 1)),
+    9
+  ).toISOString();
 }
 
 export function getEventCloseTime(startDate: string) {
-  return addHours(startOfDay(addDays(startDate, 2)), 12).toISOString();
+  return addHours(
+    startOfDay(addDays(new TZDate(startDate, "America/Toronto"), 2)),
+    12
+  ).toISOString();
 }
 
 export const getRandomInt = (min: number, max: number) => {
