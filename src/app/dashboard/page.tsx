@@ -17,9 +17,11 @@ const DashboardPage = async ({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   const user = await currentUser();
-  const events = await getAllEventsAndPicksForUser(user!.id);
-
   const error = (await searchParams).error;
+
+  if (!user) return null;
+
+  const events = await getAllEventsAndPicksForUser(user.id);
 
   const openEvents = events.filter(
     (event) => !event.isComplete && !event.isOngoing
