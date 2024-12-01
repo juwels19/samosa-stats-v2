@@ -10,8 +10,6 @@ import { currentUser } from "@clerk/nextjs/server";
 const UserManagement = async () => {
   const users = await getClerkUsers();
 
-  console.log("user management = ", users);
-
   const signedInUser = await currentUser();
 
   const isSignedInUserApprover = signedInUser?.privateMetadata.approver;
