@@ -1,7 +1,7 @@
 "use server";
 
 import { Event } from "@prisma/client";
-import { tasks } from "@trigger.dev/sdk/v3";
+import { metadata, tasks } from "@trigger.dev/sdk/v3";
 import type { closeEventSubmissionTask } from "~/trigger/close-event-submission";
 import { EventWithPicks, setEventCountdownActive } from "~/db/queries/events";
 import { revalidatePath } from "next/cache";
@@ -23,11 +23,15 @@ export async function closeEventSubmission({
   try {
     await setEventCountdownActive({ eventId: event.id });
 
+    const gateCloseTime = getEventGateCloseTime(event.startDate);
+    console.log(gateCloseTime);
+
     const handle = await tasks.trigger<typeof closeEventSubmissionTask>(
       "close-event-submission",
       { event },
       {
-        delay: getEventGateCloseTime(event.startDate),
+        metadata: { gateCloseTime },
+        delay: gateCloseTime,
       }
     );
 
@@ -41,11 +45,16 @@ export async function closeEventSubmission({
 
 export async function closeEvent({ event }: { event: Event | EventWithPicks }) {
   try {
+    const eventCloseTime = getEventCloseTime(event.startDate);
+
+    console.log(eventCloseTime);
+
     const handle = await tasks.trigger<typeof closeEventTask>(
       "close-event",
       { event },
       {
-        delay: getEventCloseTime(event.startDate),
+        metadata: { eventCloseTime },
+        delay: eventCloseTime,
       }
     );
 
