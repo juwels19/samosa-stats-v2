@@ -1,3 +1,4 @@
+import { RedirectToSignIn } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { InfoIcon } from "lucide-react";
 import React from "react";
@@ -19,7 +20,9 @@ const DashboardPage = async ({
   const user = await currentUser();
   const error = (await searchParams).error;
 
-  if (!user) return null;
+  if (!user) {
+    return <RedirectToSignIn />;
+  }
 
   const events = await getAllEventsAndPicksForUser(user.id);
 
