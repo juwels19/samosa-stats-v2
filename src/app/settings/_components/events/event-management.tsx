@@ -4,11 +4,16 @@ import EventCard from "~/components/common/event-card";
 import NewEventForm from "~/app/settings/_components/events/new-event-form";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { getActiveSeason } from "~/db/queries/seasons";
-import { EventWithPicks } from "~/db/queries/events";
+import {
+  ActiveSeasonWithEventsAndPicks,
+  getActiveSeason,
+} from "~/db/queries/seasons";
 
 const EventManagement = async () => {
-  const activeSeason = await getActiveSeason({ includeEvents: true });
+  const activeSeason: ActiveSeasonWithEventsAndPicks | null =
+    await getActiveSeason();
+
+  if (!activeSeason) return;
 
   return (
     <Card className="h-full">
@@ -19,7 +24,7 @@ const EventManagement = async () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {activeSeason?.Event.length === 0 && (
+        {activeSeason.Event.length === 0 && (
           <Alert variant={"warning"}>
             <TriangleAlertIcon className="size-5" />
             <AlertTitle>No events found!</AlertTitle>
@@ -30,9 +35,9 @@ const EventManagement = async () => {
           </Alert>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {activeSeason!.Event.sort((a, b) =>
+          {activeSeason.Event.sort((a, b) =>
             compareAsc(parseJSON(a.startDate), parseJSON(b.startDate))
-          ).map((event: EventWithPicks) => (
+          ).map((event) => (
             <EventCard key={event.eventCode} event={event} type="admin" />
           ))}
         </div>

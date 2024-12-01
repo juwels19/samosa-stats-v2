@@ -12,17 +12,29 @@ export type ActiveSeasonWithEvents = Prisma.SeasonGetPayload<
   typeof activeSeasonWithEvents
 >;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const activeSeasonWithEventsAndPicks =
+  Prisma.validator<Prisma.SeasonDefaultArgs>()({
+    include: {
+      Event: { include: { Pick: { include: { Categories: true } } } },
+    },
+  });
+
+export type ActiveSeasonWithEventsAndPicks = Prisma.SeasonGetPayload<
+  typeof activeSeasonWithEventsAndPicks
+>;
+
 export async function getAllSeasons() {
   const seasons = await prisma.season.findMany();
   return seasons;
 }
 
-export async function getActiveSeason({
-  includeEvents = false,
-}: { includeEvents?: boolean } = {}) {
+export async function getActiveSeason() {
   const season = await prisma.season.findFirst({
     where: { isActive: true },
-    include: includeEvents ? { Event: true } : undefined,
+    include: {
+      Event: { include: { Pick: { include: { Categories: true } } } },
+    },
   });
   return season;
 }
