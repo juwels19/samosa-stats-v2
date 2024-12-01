@@ -9,17 +9,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getEventGateCloseTime(startDate: string) {
-  return new TZDate(
-    addHours(startOfDay(addDays(startDate, 1)), 9),
-    "America/Toronto"
-  ).toLocaleString();
+  return addHours(startOfDay(addDays(startDate, 1)), 9).toISOString();
 }
 
 export function getEventCloseTime(startDate: string) {
-  return new TZDate(
-    addHours(startOfDay(addDays(startDate, 2)), 12),
-    "America/Toronto"
-  ).toISOString();
+  return addHours(startOfDay(addDays(startDate, 2)), 12).toISOString();
 }
 
 export const getRandomInt = (min: number, max: number) => {
