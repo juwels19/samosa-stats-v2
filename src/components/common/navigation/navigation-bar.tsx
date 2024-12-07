@@ -19,15 +19,19 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/navbar";
+import { ROUTES } from "~/lib/routes";
 
 const logo = "/SS_logo.png";
 
-const menuItems = [{ label: "Dashboard", href: "/dashboard" }];
+const menuItems = [
+  { label: "Dashboard", href: ROUTES.DASHBOARD },
+  { label: "Leaderboard", href: ROUTES.LEADERBOARD },
+];
 
 const adminMenuItems = [
-  { label: "Approvals", href: "/approvals" },
-  { label: "Scores", href: "/scores" },
-  { label: "Settings", href: "/settings" },
+  { label: "Approvals", href: ROUTES.APPROVALS },
+  { label: "Scores", href: ROUTES.SCORES },
+  { label: "Settings", href: ROUTES.SETTINGS },
 ];
 
 const NavigationBar = ({

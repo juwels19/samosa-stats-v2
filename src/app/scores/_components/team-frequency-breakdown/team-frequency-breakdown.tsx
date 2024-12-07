@@ -17,12 +17,13 @@ const TeamFrequencyBreakdown = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <H3>Team frequency breakdown</H3>
-      <div className="w-1/4 mb-6">
+      <H3>Team frequency</H3>
+      <div className="mb-6">
         <DataTable
           columns={teamFrequencyBreakdownColumns}
           data={mappedData}
           initialSorting={{ id: "count", desc: true }}
+          containerClassName="border-none"
         />
       </div>
     </div>

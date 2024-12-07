@@ -39,12 +39,45 @@ export async function getEventsReadyForScoring() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const eventCodeWithPickCounts = Prisma.validator<Prisma.EventDefaultArgs>()({
+  select: {
+    eventCode: true,
+    _count: {
+      select: {
+        Pick: true,
+      },
+    },
+  },
+});
+
+export type EventCodeWithPickCounts = Prisma.EventGetPayload<
+  typeof eventCodeWithPickCounts
+>;
+
+export async function getNumberOfPicksForEachEvent() {
+  const picks = await prisma.event.findMany({
+    where: { Season: { isActive: true } },
+    select: {
+      eventCode: true,
+      _count: {
+        select: {
+          Pick: true,
+        },
+      },
+    },
+  });
+  return picks;
+}
+
 export async function getEventByEventCode(
   eventCode: string
 ): Promise<EventWithPicks | null> {
   const event = await prisma.event.findUnique({
     where: { eventCode },
-    include: { Pick: { include: { Categories: true } } },
+    include: {
+      Pick: { orderBy: { score: "desc" }, include: { Categories: true } },
+    },
   });
   return event;
 }

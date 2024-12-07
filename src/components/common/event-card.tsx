@@ -25,12 +25,13 @@ const EventCard = ({
   type,
 }: {
   event: EventWithPicks;
-  type?: "admin" | "scoring" | undefined;
+  type?: "admin" | "scoring" | "leaderboard" | undefined;
 }) => {
   const eventHasPicks = (event.Pick && event?.Pick?.length !== 0) || false;
 
   const isAdminCard = type === "admin";
   const isScoringCard = type === "scoring";
+  const isLeaderboardCard = type === "leaderboard";
 
   const userHasRandomPick =
     event?.Pick &&
@@ -39,8 +40,14 @@ const EventCard = ({
 
   const renderNavigationLink = () => {
     let linkText = "Submit Picks";
+    let route = ROUTES.PICKS;
+
     if (isScoringCard) {
       linkText = "Submit Scores";
+      route = ROUTES.SCORES;
+    } else if (isLeaderboardCard) {
+      linkText = "View Results";
+      route = ROUTES.LEADERBOARD;
     } else if (event.isOngoing && !eventHasPicks && !userHasRandomPick) {
       linkText = "Submit Random Picks";
     } else if (event.isComplete || (event.isOngoing && eventHasPicks)) {
@@ -48,11 +55,7 @@ const EventCard = ({
     }
 
     return (
-      <Link
-        href={`${isScoringCard ? ROUTES.SCORES : ROUTES.PICKS}/${
-          event.eventCode
-        }`}
-      >
+      <Link href={`${route}/${event.eventCode}`}>
         <Button variant="link" className="pr-0">
           {linkText}
           <MoveRightIcon />
@@ -65,7 +68,7 @@ const EventCard = ({
     <Card
       className={cn(
         "flex flex-col",
-        eventHasPicks && !isScoringCard
+        eventHasPicks && !isScoringCard && !isLeaderboardCard
           ? "bg-green-200/20 dark:bg-green-950/50"
           : ""
       )}
@@ -106,7 +109,8 @@ const EventCard = ({
         <div
           className={cn(
             "w-full flex flex-row justify-between",
-            isAdminCard || (eventHasPicks && !isScoringCard)
+            isAdminCard ||
+              (eventHasPicks && !isScoringCard && !isLeaderboardCard)
               ? "justify-between"
               : "justify-end"
           )}
@@ -118,7 +122,7 @@ const EventCard = ({
             </>
           ) : (
             <>
-              {eventHasPicks && !isScoringCard && (
+              {eventHasPicks && !isScoringCard && !isLeaderboardCard && (
                 <p className="inline-flex items-center gap-1">
                   <CheckIcon color="green" />
                   {userHasRandomPick

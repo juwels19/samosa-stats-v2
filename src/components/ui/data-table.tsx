@@ -19,17 +19,20 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { cn } from "~/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   initialSorting?: ColumnSort;
+  containerClassName?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   initialSorting = undefined,
+  containerClassName = undefined,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>(
     initialSorting ? [initialSorting] : []
@@ -47,7 +50,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border">
+    <div className={cn(containerClassName, "rounded-md border")}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

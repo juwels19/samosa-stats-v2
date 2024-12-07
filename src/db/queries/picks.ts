@@ -2,6 +2,7 @@
 
 import { Prisma } from "@prisma/client";
 import { formatISO } from "date-fns";
+import { revalidatePath } from "next/cache";
 import prisma from "~/db";
 
 export async function getTeamPickCountsForEvent(eventId: number): Promise<{
@@ -26,6 +27,23 @@ export async function getTeamPickCountsForEvent(eventId: number): Promise<{
   });
 
   return teamPickCount;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const picksForOverallLeaderboard = Prisma.validator<Prisma.PickDefaultArgs>()({
+  include: { Event: { select: { eventCode: true } } },
+});
+
+export type PicksForOverallLeaderboard = Prisma.PickGetPayload<
+  typeof picksForOverallLeaderboard
+>;
+
+export async function getPicksForOverallLeaderboard() {
+  const picks = await prisma.pick.findMany({
+    where: { Event: { Season: { isActive: true } }, rank: { not: null } },
+    include: { Event: { select: { eventCode: true } } },
+  });
+  return picks;
 }
 
 export async function submitPickForEvent({
@@ -110,18 +128,20 @@ export type PickWithCategories = Prisma.PickGetPayload<
   typeof pickWithCategories
 >;
 
-export async function setPickScoresForEvent(picksWithScores: {
-  [key: string]: number;
-}) {
+export async function setPickScoresForEvent(
+  picksWithScores: { pickId: string; score: number; rank: number }[],
+  eventCode: string
+) {
   await prisma.$transaction(
-    Object.entries(picksWithScores).map(([pickId, score]) =>
+    picksWithScores.map((data) =>
       prisma.pick.update({
         where: {
-          id: parseInt(pickId),
+          id: parseInt(data.pickId),
         },
-        data: { score: score },
+        data: { score: data.score, rank: data.rank },
       })
     )
   );
+  revalidatePath(`/scores/${eventCode}`);
   return { success: true, data: {} };
 }

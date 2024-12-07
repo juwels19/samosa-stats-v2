@@ -36,6 +36,7 @@ model Pick {
   answersJSON  String
   isRandom     Boolean    @default(false)
   score        Int?
+  rank         Int?
   eventId      Int
   Event        Event      @relation(fields: [eventId], references: [id])
   Categories   Category[]

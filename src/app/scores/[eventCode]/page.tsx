@@ -1,9 +1,11 @@
 import { InfoIcon } from "lucide-react";
 import React from "react";
+import RankingTable from "~/app/leaderboard/_components/event-ranking/event-ranking-table";
 import ScoreEntryForm from "~/app/scores/_components/score-entry-form";
 import TeamFrequencyBreakdown from "~/app/scores/_components/team-frequency-breakdown/team-frequency-breakdown";
 import PageHeading from "~/components/common/page-heading";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { H3 } from "~/components/ui/typography";
 import { getCategoryCountsForEvent } from "~/db/queries/categories";
 import { getEventByEventCode } from "~/db/queries/events";
 import { getTeamPickCountsForEvent } from "~/db/queries/picks";
@@ -27,10 +29,6 @@ const EventScoreEntryPage = async ({
   ]);
 
   const teamPickCount = await getTeamPickCountsForEvent(event!.id);
-  const numberOfPicks = event?.Pick.length;
-
-  console.log(teamPickCount);
-  console.log(numberOfPicks);
 
   if (!event)
     return (
@@ -63,7 +61,15 @@ const EventScoreEntryPage = async ({
         </AlertDescription>
       </Alert>
       <ScoreEntryForm event={event} categories={seasonCategories} />
-      <TeamFrequencyBreakdown data={teamPickCount} />
+      <div className="grid grid-cols-1 md:grid-cols-8 md:gap-8 items-stretch">
+        <div className="md:col-span-2">
+          <TeamFrequencyBreakdown data={teamPickCount} />
+        </div>
+        <div className="flex flex-col gap-4 md:col-span-6">
+          <H3>Event ranking</H3>
+          <RankingTable event={event} shouldShowLegend />
+        </div>
+      </div>
     </div>
   );
 };

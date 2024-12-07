@@ -1,7 +1,7 @@
 "use client";
 
-import { InfoIcon } from "lucide-react";
-import React from "react";
+import { InfoIcon, Loader2Icon } from "lucide-react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
@@ -29,8 +29,6 @@ import {
 import { Input } from "~/components/ui/input";
 import { toast } from "sonner";
 import { setPickScoresForEvent } from "~/db/queries/picks";
-import { useRouter } from "next/navigation";
-import { ROUTES } from "~/lib/routes";
 import ScoreEntryFormLoading from "~/app/scores/_components/score-entry-form-loading";
 import { H4 } from "~/components/ui/typography";
 
@@ -41,7 +39,7 @@ const ScoreEntryForm = ({
   event: EventWithPicks;
   categories: CategoriesWithPickCounts[];
 }) => {
-  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const teamFetcher = useQuery({
     queryKey: ["teams", event.eventCode],
@@ -103,6 +101,7 @@ const ScoreEntryForm = ({
   const handleScoreSubmission = async (
     formValues: z.infer<typeof scoresFormSchema>
   ) => {
+    setIsSubmitting(true);
     const teamScores = Object.fromEntries(
       teamFetcher.data.map((team) => [team.teamNumber, 0])
     );
@@ -131,17 +130,66 @@ const ScoreEntryForm = ({
 
     console.log(pickIdsWithScores);
 
+    const picksWithScoresArr: {
+      pickId: string;
+      score: number;
+      rank: number;
+    }[] = Object.entries(pickIdsWithScores)
+      .map((item) => ({ pickId: item[0], score: item[1], rank: 0 }))
+      .sort((a, b) => b.score - a.score);
+
+    let rank = 1; // Start ranking from 1
+
+    // Iterate over the sorted array to assign ranks
+    for (let i = 0; i < picksWithScoresArr.length; i++) {
+      if (i === 0) {
+        // If it's the first item, assign the rank
+        picksWithScoresArr[i].rank = rank;
+        rank++;
+        continue;
+      }
+
+      console.log(
+        picksWithScoresArr[i].score === picksWithScoresArr[i - 1].score
+      );
+
+      if (picksWithScoresArr[i].score === picksWithScoresArr[i - 1].score) {
+        picksWithScoresArr[i].rank = picksWithScoresArr[i - 1].rank;
+        continue;
+      }
+
+      picksWithScoresArr[i].rank = rank;
+      rank++;
+
+      // if (picksWithScoresArr[i].score !== prevScore) {
+      //   // If value has changed, assign the new rank
+      //   rank += rankOffset - 1; // Offset to skip ranks for ties
+      //   rankOffset = 1; // Reset the rank offset for the next unique value
+      // } else {
+      //   // If the value is the same as the previous, increment the rank offset
+      //   rankOffset++;
+      // }
+
+      // // Assign the rank to the object
+      // picksWithScoresArr[i].rank = rank;
+
+      // // Update the previous value for tie comparison
+      // prevScore = picksWithScoresArr[i].score;
+    }
+
+    console.log("scores array", picksWithScoresArr);
+
     try {
-      await setPickScoresForEvent(pickIdsWithScores);
+      await setPickScoresForEvent(picksWithScoresArr, event.eventCode);
 
       toast.success(
         `Scores for ${event.displayName || event.name} submitted successfully!`
       );
-      router.push(ROUTES.SCORES);
     } catch (e) {
       const error = e as Error;
       toast.error(error.message);
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -212,7 +260,10 @@ const ScoreEntryForm = ({
             </div>
           ))}
         </div>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <Loader2Icon className="animate-spin" />}
+          Submit
+        </Button>
       </form>
     </Form>
   );

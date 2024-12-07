@@ -36,6 +36,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
+import GenerateRandomPick from "~/app/picks/[eventCode]/_components/generate-random-pick";
 
 const PickSubmission = () => {
   const [confirmRandomPickModalOpen, setConfirmRandomPickModalOpen] =
@@ -200,7 +201,10 @@ const PickSubmission = () => {
 
   return (
     <>
-      <H3>Summary</H3>
+      <div className="flex flex-row justify-between items-start text-start">
+        <H3>Summary</H3>
+        <GenerateRandomPick event={event} categories={categories} />
+      </div>
       {Object.keys(submitPickForm.formState.errors).length > 0 &&
         submitPickForm.formState.errors && (
           <Alert variant="destructive">
