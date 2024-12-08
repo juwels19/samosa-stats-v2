@@ -96,7 +96,7 @@ const NavigationBar = ({
               <NavbarItem
                 isActive={pathname.includes(menuItem.href)}
                 className={cn(
-                  "p-2 rounded-md",
+                  "p-2 rounded-md hover:bg-slate-200 hover:dark:bg-slate-800",
                   pathname.includes(menuItem.href) &&
                     "bg-slate-200 dark:bg-slate-800"
                 )}
@@ -116,7 +116,7 @@ const NavigationBar = ({
                 <NavbarItem
                   isActive={pathname.includes(menuItem.href)}
                   className={cn(
-                    "p-2 rounded-md",
+                    "p-2 rounded-md hover:bg-slate-200 hover:dark:bg-slate-800",
                     pathname.includes(menuItem.href) &&
                       "bg-slate-200 dark:bg-slate-800"
                   )}

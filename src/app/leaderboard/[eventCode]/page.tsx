@@ -34,7 +34,7 @@ const EventSpecificLeaderboardPage = async ({
           <H2>Check back later to see the results!</H2>
         </div>
       ) : (
-        <RankingTable event={event} shouldShowLegend />
+        <RankingTable event={event} />
       )}
     </div>
   );

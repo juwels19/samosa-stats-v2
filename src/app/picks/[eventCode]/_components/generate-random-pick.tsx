@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { EventWithPicks } from "~/db/queries/events";
 import { submitPickForEvent } from "~/db/queries/picks";
-import { env } from "~/lib/env";
 import { getRandomInt } from "~/lib/utils";
 import { fetchTeamsForEvent } from "~/server/http/frc-events";
 
@@ -61,7 +60,7 @@ const GenerateRandomPick = ({
       randomCategoriesObj[categories[randomInt].id] = true;
     }
     const randomCategoryIds = Object.keys(randomCategoriesObj).sort();
-    const randomKey = Math.floor(Math.random() * 10);
+    const randomKey = Math.floor(Math.random() * 20);
     await submitPickForEvent({
       categories: categories
         .filter((category) =>
@@ -78,8 +77,6 @@ const GenerateRandomPick = ({
     });
     toast.success("Random picks generated successfully!");
   };
-
-  if (env.NODE_ENV !== "development") return null;
 
   return (
     <Button variant="secondary" onClick={onClick}>

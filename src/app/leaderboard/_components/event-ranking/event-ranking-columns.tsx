@@ -2,7 +2,6 @@
 
 import { Pick } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 
 const renderMedal = (rank: number, index: number, rowCount: number) => {
@@ -15,13 +14,14 @@ const renderMedal = (rank: number, index: number, rowCount: number) => {
 
 const renderBonusPoint = (
   isRandom: boolean,
-  index: number,
+  rank: number,
   rowCount: number
 ) => {
-  if (isRandom && index <= 3)
-    return <TrendingUpIcon className="text-green-500 size-7" />;
-  if (isRandom && index >= rowCount - 3)
-    return <TrendingDownIcon className="text-red-500 size-7" />;
+  // Change this to look at the rank instead of the index
+  if (isRandom && rank <= 3)
+    return <span className="text-green-500 font-semibold text-xl">+1</span>;
+  if (isRandom && rank >= rowCount - 3)
+    return <span className="text-red-500 font-semibold text-xl">-1</span>;
   return null;
 };
 
@@ -35,7 +35,7 @@ export const rankingColumns: ColumnDef<Pick>[] = [
   {
     header: "Name",
     cell: ({ row }) => (
-      <div className="flex flex-col font-bold text-lg">
+      <div className="flex flex-col font-bold md:text-lg">
         {row.original.displayName && <span>{row.original.displayName}</span>}
         <span
           className={cn(
@@ -70,7 +70,7 @@ export const rankingColumns: ColumnDef<Pick>[] = [
         </span>
         {renderBonusPoint(
           row.original.isRandom,
-          row.index + 1,
+          row.original.rank || row.index + 1,
           table.getRowCount()
         )}
       </div>

@@ -40,7 +40,13 @@ export type PicksForOverallLeaderboard = Prisma.PickGetPayload<
 
 export async function getPicksForOverallLeaderboard() {
   const picks = await prisma.pick.findMany({
-    where: { Event: { Season: { isActive: true } }, rank: { not: null } },
+    where: {
+      Event: {
+        Season: { isActive: true },
+        // name: { notIn: ["science", "technology"] },
+      },
+      rank: { not: null },
+    },
     include: { Event: { select: { eventCode: true } } },
   });
   return picks;

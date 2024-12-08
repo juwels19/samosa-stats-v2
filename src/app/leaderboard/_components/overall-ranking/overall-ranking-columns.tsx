@@ -1,74 +1,82 @@
 "use client";
 
-import { Pick } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 
-const renderMedal = (rank: number, index: number, rowCount: number) => {
-  if (rank === 1) return `🥇`;
-  if (rank === 2) return `🥈`;
-  if (rank === 3) return `🥉`;
-  if (index === rowCount) return `🧻`;
-  return null;
+const renderMedals = (medalCounts: {
+  gold: number;
+  silver: number;
+  bronze: number;
+}) => {
+  let medalString = "";
+  if (medalCounts.gold > 0) {
+    medalString += "🥇".repeat(medalCounts.gold);
+  }
+  if (medalCounts.silver > 0) {
+    medalString += "🥈".repeat(medalCounts.silver);
+  }
+  if (medalCounts.bronze > 0) {
+    medalString += "🥉".repeat(medalCounts.bronze);
+  }
+  return medalString;
 };
 
-const renderBonusPoint = (
-  isRandom: boolean,
-  index: number,
-  rowCount: number
-) => {
-  if (isRandom && index <= 3)
-    return <TrendingUpIcon className="text-green-500 size-7" />;
-  if (isRandom && index >= rowCount - 3)
-    return <TrendingDownIcon className="text-red-500 size-7" />;
-  return null;
-};
-
-export const overallRankingColumns: ColumnDef<Pick>[] = [
+export const overallRankingColumns: ColumnDef<{
+  totalPoints: number;
+  positiveBonusPoints: number;
+  negativeBonusPoints: number;
+  fullName: string;
+  medalCounts: {
+    gold: number;
+    silver: number;
+    bronze: number;
+  };
+}>[] = [
   {
     id: "rank",
-    cell: ({ row }) => (
-      <span className="font-bold text-lg">{row.index + 1}</span>
+    cell: ({ table, row }) => (
+      <span className="font-bold text-lg">
+        {table
+          .getSortedRowModel()
+          .flatRows.findIndex((flatRow) => flatRow.id === row.id) + 1}
+      </span>
     ),
   },
   {
+    accessorKey: "fullName",
     header: "Name",
     cell: ({ row }) => (
-      <div className="flex flex-col font-bold text-lg">
-        {row.original.displayName && <span>{row.original.displayName}</span>}
-        <span
-          className={cn(
-            row.original.displayName ? "text-sm text-neutral-500" : ""
-          )}
-        >
-          {row.original.userFullname}
-        </span>
-      </div>
+      <span className="flex flex-col font-bold text-lg">
+        {row.original.fullName}
+      </span>
     ),
   },
   {
     id: "medals",
-    cell: ({ table, row }) => (
+    cell: ({ row }) => (
       <div className={cn("text-3xl flex flex-row gap-2 items-center")}>
-        <span>
-          {renderMedal(
-            row.original.rank || row.index + 1,
-            row.index + 1,
-            table.getRowCount()
-          )}
-        </span>
-        {renderBonusPoint(
-          row.original.isRandom,
-          row.index + 1,
-          table.getRowCount()
-        )}
+        <span>{renderMedals(row.original.medalCounts)}</span>
       </div>
     ),
   },
   {
-    id: "points",
-    header: "Points",
-    cell: ({ row }) => <span>test points</span>,
+    id: "bonusPoints",
+    header: "+/- points",
+    cell: ({ row }) => (
+      <span className="font-bold text-lg">
+        {`${row.original.positiveBonusPoints} /
+        ${row.original.negativeBonusPoints}`}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "totalPoints",
+    header: "Total Points",
+    sortingFn: "basic",
+    sortDescFirst: true,
+    enableSorting: true,
+    cell: ({ row }) => (
+      <span className="font-bold text-lg">{row.original.totalPoints}</span>
+    ),
   },
 ];

@@ -1,5 +1,6 @@
 import { Pick } from "@prisma/client";
 import React from "react";
+import OverallRankingTable from "~/app/leaderboard/_components/overall-ranking/overall-ranking-table";
 import EventCard from "~/components/common/event-card";
 import PageHeading from "~/components/common/page-heading";
 import {
@@ -11,6 +12,7 @@ import {
   PicksForOverallLeaderboard,
 } from "~/db/queries/picks";
 import { getActiveSeason } from "~/db/queries/seasons";
+import { RankingData } from "~/types/globals";
 
 export const metadata = {
   title: "Leaderboard",
@@ -32,27 +34,25 @@ const MainLeaderboardPage = async () => {
       numberOfPicksForEachEventPromise,
     ]);
 
-  const scoresForUser: {
-    [key: string]: {
-      totalPoints: number;
-      bonusPoints: number;
-      fullName: string;
-      displayName?: string | null;
-    };
-  } = {};
+  const scoresForUser: RankingData = {};
 
   const computePointsForPick = (
     pick: Pick,
     eventCode: string
-  ): [number, number] => {
+  ): [number, number, number, string] => {
     let totalPoints = 0;
-    let bonusPoints = 0;
+    let positiveBonusPoints = 0;
+    let negativeBonusPoints = 0;
+    let medal = "none";
     if (pick.rank === 1) {
       totalPoints += 3;
+      medal = "gold";
     } else if (pick.rank === 2) {
       totalPoints += 2;
+      medal = "silver";
     } else if (pick.rank === 3) {
       totalPoints += 1;
+      medal = "bronze";
     }
 
     const numberOfPicksForEvent = numberOfPicksForEachEvent.find(
@@ -61,41 +61,61 @@ const MainLeaderboardPage = async () => {
 
     if (pick.isRandom && pick.rank) {
       if (pick.rank <= 3) {
-        bonusPoints = 1;
+        positiveBonusPoints = 1;
       } else if (pick.rank >= numberOfPicksForEvent - 3) {
-        bonusPoints = -1;
+        negativeBonusPoints = -1;
       }
     }
 
-    totalPoints += bonusPoints;
+    totalPoints += positiveBonusPoints;
+    totalPoints += negativeBonusPoints;
 
-    return [totalPoints, bonusPoints];
+    return [totalPoints, positiveBonusPoints, negativeBonusPoints, medal];
   };
 
   picksForOverallLeaderboard.forEach((pick) => {
-    const [totalPoints, bonusPoints] = computePointsForPick(
-      pick,
-      pick.Event.eventCode
-    );
+    const [totalPoints, positiveBonusPoints, negativeBonusPoints, medal] =
+      computePointsForPick(pick, pick.Event.eventCode);
     if (pick.userId in scoresForUser && pick.score) {
       scoresForUser[pick.userId].totalPoints += totalPoints;
-      scoresForUser[pick.userId].bonusPoints += bonusPoints;
+      scoresForUser[pick.userId].positiveBonusPoints += positiveBonusPoints;
+      scoresForUser[pick.userId].negativeBonusPoints += negativeBonusPoints;
+      if (medal === "gold") {
+        scoresForUser[pick.userId].medalCounts.gold += 1;
+      } else if (medal === "silver") {
+        scoresForUser[pick.userId].medalCounts.silver += 1;
+      } else if (medal === "bronze") {
+        scoresForUser[pick.userId].medalCounts.bronze += 1;
+      }
+      scoresForUser[pick.userId].medalCounts.gold += negativeBonusPoints;
       return;
     }
+
     scoresForUser[pick.userId] = {
       totalPoints,
-      bonusPoints,
-      displayName: pick.displayName,
+      positiveBonusPoints,
+      negativeBonusPoints,
       fullName: pick.userFullname,
+      medalCounts: {
+        gold: medal === "gold" ? 1 : 0,
+        silver: medal === "silver" ? 1 : 0,
+        bronze: medal === "bronze" ? 1 : 0,
+      },
     };
   });
 
   console.log(scoresForUser);
 
+  const rankingData = Object.values(scoresForUser);
+
   return (
     <div className="w-full p-6 flex flex-col gap-4">
-      <PageHeading label="Overall leaderboard" />
-
+      {picksForOverallLeaderboard.length > 0 && (
+        <>
+          <PageHeading label="Overall leaderboard" />
+          <OverallRankingTable rankingData={rankingData} />
+        </>
+      )}
       <PageHeading label="Event specific results" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {currentSeason &&

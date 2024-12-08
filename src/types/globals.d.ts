@@ -10,3 +10,17 @@ declare global {
     };
   }
 }
+
+export type RankingData = {
+  [key: string]: {
+    totalPoints: number;
+    positiveBonusPoints: number;
+    negativeBonusPoints: number;
+    fullName: string;
+    medalCounts: {
+      gold: number;
+      silver: number;
+      bronze: number;
+    };
+  };
+};

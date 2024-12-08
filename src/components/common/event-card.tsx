@@ -97,12 +97,15 @@ const EventCard = ({
               <span>{event.numberOfCategoryPicks}</span>
             </div>
           </div>
-          {event.isCountdownActive && !event.isComplete && !event.isOngoing && (
-            <div className="flex flex-col items-end">
-              <span className="font-semibold">Time to gate close:</span>
-              <EventCountdownTimer event={event} />
-            </div>
-          )}
+          {event.isCountdownActive &&
+            !event.isComplete &&
+            !event.isOngoing &&
+            !isLeaderboardCard && (
+              <div className="flex flex-col items-end">
+                <span className="font-semibold">Time to gate close:</span>
+                <EventCountdownTimer event={event} />
+              </div>
+            )}
         </div>
       </CardContent>
       <CardFooter>

@@ -67,7 +67,7 @@ const EventScoreEntryPage = async ({
         </div>
         <div className="flex flex-col gap-4 md:col-span-6">
           <H3>Event ranking</H3>
-          <RankingTable event={event} shouldShowLegend />
+          <RankingTable event={event} />
         </div>
       </div>
     </div>
