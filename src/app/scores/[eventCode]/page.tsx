@@ -60,7 +60,11 @@ const EventScoreEntryPage = async ({
           see the full category.
         </AlertDescription>
       </Alert>
-      <ScoreEntryForm event={event} categories={seasonCategories} />
+      <ScoreEntryForm
+        event={event}
+        categories={seasonCategories}
+        teamPickCount={teamPickCount}
+      />
       <div className="grid grid-cols-1 md:grid-cols-8 md:gap-8 items-stretch">
         <div className="md:col-span-2">
           <TeamFrequencyBreakdown data={teamPickCount} />

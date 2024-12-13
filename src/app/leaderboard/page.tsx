@@ -10,6 +10,7 @@ import {
 import {
   getPicksForOverallLeaderboard,
   PicksForOverallLeaderboard,
+  getNumberOfRankingCountsPerUser,
 } from "~/db/queries/picks";
 import { getActiveSeason } from "~/db/queries/seasons";
 import { RankingData } from "~/types/globals";
@@ -26,15 +27,23 @@ const MainLeaderboardPage = async () => {
   > = getPicksForOverallLeaderboard();
   const numberOfPicksForEachEventPromise: Promise<EventCodeWithPickCounts[]> =
     getNumberOfPicksForEachEvent();
+  const numberOfRankingCountsPerUserPromise = getNumberOfRankingCountsPerUser();
 
-  const [currentSeason, picksForOverallLeaderboard, numberOfPicksForEachEvent] =
-    await Promise.all([
-      currentSeasonPromise,
-      picksForOverallLeaderboardPromise,
-      numberOfPicksForEachEventPromise,
-    ]);
+  const [
+    currentSeason,
+    picksForOverallLeaderboard,
+    numberOfPicksForEachEvent,
+    numberOfRankingCountsPerUser,
+  ] = await Promise.all([
+    currentSeasonPromise,
+    picksForOverallLeaderboardPromise,
+    numberOfPicksForEachEventPromise,
+    numberOfRankingCountsPerUserPromise,
+  ]);
 
   const scoresForUser: RankingData = {};
+
+  // console.log(numberOfRankingCountsPerUser);
 
   const computePointsForPick = (
     pick: Pick,
@@ -101,10 +110,11 @@ const MainLeaderboardPage = async () => {
         silver: medal === "silver" ? 1 : 0,
         bronze: medal === "bronze" ? 1 : 0,
       },
+      rankCount: {
+        ...numberOfRankingCountsPerUser[pick.userId],
+      },
     };
   });
-
-  console.log(scoresForUser);
 
   const rankingData = Object.values(scoresForUser);
 

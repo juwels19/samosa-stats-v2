@@ -52,6 +52,30 @@ export async function getPicksForOverallLeaderboard() {
   return picks;
 }
 
+export async function getNumberOfRankingCountsPerUser() {
+  const finalCounts: { [key: string]: { [key: number]: number } } = {};
+  const picks = await prisma.pick.groupBy({
+    by: ["userId", "rank"],
+    where: {
+      Event: {
+        Season: { isActive: true },
+      },
+      rank: { not: null },
+    },
+    _count: true,
+  });
+
+  picks.map((pick) => {
+    if (finalCounts[pick.userId]) {
+      finalCounts[pick.userId][pick.rank || -10] = pick._count;
+    } else {
+      finalCounts[pick.userId] = { [pick!.rank || -10]: pick._count };
+    }
+  });
+
+  return finalCounts;
+}
+
 export async function submitPickForEvent({
   eventId,
   userId,

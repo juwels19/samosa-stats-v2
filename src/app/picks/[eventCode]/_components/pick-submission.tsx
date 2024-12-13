@@ -203,7 +203,7 @@ const PickSubmission = () => {
     <>
       <div className="flex flex-row justify-between items-start text-start">
         <H3>Summary</H3>
-        <GenerateRandomPick event={event} categories={categories} />
+        {/* <GenerateRandomPick event={event} categories={categories} /> */}
       </div>
       {Object.keys(submitPickForm.formState.errors).length > 0 &&
         submitPickForm.formState.errors && (

@@ -22,5 +22,8 @@ export type RankingData = {
       silver: number;
       bronze: number;
     };
+    rankCount: {
+      [key: number]: number;
+    };
   };
 };

@@ -35,9 +35,11 @@ import { H4 } from "~/components/ui/typography";
 const ScoreEntryForm = ({
   event,
   categories,
+  teamPickCount,
 }: {
   event: EventWithPicks;
   categories: CategoriesWithPickCounts[];
+  teamPickCount: { [key: number]: number };
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -106,8 +108,16 @@ const ScoreEntryForm = ({
       teamFetcher.data.map((team) => [team.teamNumber, 0])
     );
     console.log(event.Pick);
-    const pickIdsWithScores: { [key: string]: number } = Object.fromEntries(
-      event.Pick.map((pick) => [pick.id.toString(), 0])
+    const pickIdsWithScores: {
+      [key: string]: {
+        score: number;
+        uniqueness: number;
+      };
+    } = Object.fromEntries(
+      event.Pick.map((pick) => [
+        pick.id.toString(),
+        { score: 0, uniqueness: 0 },
+      ])
     );
 
     console.log(formValues);
@@ -124,7 +134,8 @@ const ScoreEntryForm = ({
     event.Pick.forEach((pick) => {
       const teams = JSON.parse(pick.answersJSON).teams;
       teams.forEach((team: number) => {
-        pickIdsWithScores[pick.id.toString()] += teamScores[team];
+        pickIdsWithScores[pick.id.toString()].score += teamScores[team];
+        pickIdsWithScores[pick.id.toString()].uniqueness += teamPickCount[team];
       });
     });
 
@@ -133,15 +144,23 @@ const ScoreEntryForm = ({
     const picksWithScoresArr: {
       pickId: string;
       score: number;
+      uniqueness: number;
       rank: number;
     }[] = Object.entries(pickIdsWithScores)
-      .map((item) => ({ pickId: item[0], score: item[1], rank: 0 }))
+      .map((item) => ({
+        pickId: item[0],
+        score: item[1].score,
+        uniqueness: item[1].uniqueness,
+        rank: 0,
+      }))
       .sort((a, b) => b.score - a.score);
 
     let rank = 1; // Start ranking from 1
 
     // Iterate over the sorted array to assign ranks
     for (let i = 0; i < picksWithScoresArr.length; i++) {
+      const isLastItem = i === picksWithScoresArr.length - 1;
+
       if (i === 0) {
         // If it's the first item, assign the rank
         picksWithScoresArr[i].rank = rank;
@@ -149,32 +168,46 @@ const ScoreEntryForm = ({
         continue;
       }
 
-      console.log(
-        picksWithScoresArr[i].score === picksWithScoresArr[i - 1].score
-      );
-
       if (picksWithScoresArr[i].score === picksWithScoresArr[i - 1].score) {
-        picksWithScoresArr[i].rank = picksWithScoresArr[i - 1].rank;
+        if (
+          picksWithScoresArr[i].uniqueness ===
+          picksWithScoresArr[i - 1].uniqueness
+        ) {
+          // If uniqueness is the same, don't break the tie and each pick gets the same rank
+          if (isLastItem) {
+            picksWithScoresArr[i].rank = -1;
+            picksWithScoresArr[i - 1].rank = -1;
+          } else {
+            picksWithScoresArr[i].rank = picksWithScoresArr[i - 1].rank;
+          }
+
+          continue;
+        } else if (
+          picksWithScoresArr[i].uniqueness >
+          picksWithScoresArr[i - 1].uniqueness
+        ) {
+          // If the current pick has a HIGHER uniqueness (meaning they picked less unique teams), assign them the next rank
+          if (isLastItem) {
+            picksWithScoresArr[i].rank = -1;
+          } else {
+            picksWithScoresArr[i].rank = rank;
+          }
+        } else {
+          // If the current pick has a LOWER uniqueness (meaning they picked more unique teams), switch the ranks of the two picks
+          if (isLastItem) {
+            picksWithScoresArr[i].rank = picksWithScoresArr[i - 1].rank;
+            picksWithScoresArr[i - 1].rank = -1;
+          } else {
+            picksWithScoresArr[i].rank = picksWithScoresArr[i - 1].rank;
+            picksWithScoresArr[i - 1].rank = rank;
+          }
+        }
+        rank++;
         continue;
       }
 
-      picksWithScoresArr[i].rank = rank;
+      picksWithScoresArr[i].rank = isLastItem ? -1 : rank;
       rank++;
-
-      // if (picksWithScoresArr[i].score !== prevScore) {
-      //   // If value has changed, assign the new rank
-      //   rank += rankOffset - 1; // Offset to skip ranks for ties
-      //   rankOffset = 1; // Reset the rank offset for the next unique value
-      // } else {
-      //   // If the value is the same as the previous, increment the rank offset
-      //   rankOffset++;
-      // }
-
-      // // Assign the rank to the object
-      // picksWithScoresArr[i].rank = rank;
-
-      // // Update the previous value for tie comparison
-      // prevScore = picksWithScoresArr[i].score;
     }
 
     console.log("scores array", picksWithScoresArr);

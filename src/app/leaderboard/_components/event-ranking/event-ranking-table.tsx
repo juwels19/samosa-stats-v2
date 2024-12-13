@@ -12,7 +12,14 @@ const RankingTable = ({ event }: { event: EventWithPicks }) => {
         columns={rankingColumns}
         data={picks}
         containerClassName="border-none"
+        initialSorting={{ id: "score", desc: true }}
       />
+      <p className="text-md">
+        <span className="font-semibold mr-1">NOTE:</span>Ties are broken by a
+        measure of team uniqueness. The uniqueness is calculated by summing the
+        frequency of the individual teams you picked. A lower uniqueness score
+        means you picked more unique teams.
+      </p>
     </div>
   );
 };

@@ -70,7 +70,7 @@ const GenerateRandomPick = ({
       categoryIds: randomCategoryIds,
       teamNumbers: randomTeamNumbers,
       displayName: `Auto-generated picks for ${event.eventCode} - ${randomKey}`,
-      isRandom: false,
+      isRandom: Math.random() < 0.75 ? false : true,
       userId: `ADMIN-${randomKey}`,
       userFullname: `ADMIN-${randomKey}`,
       eventId: event.id,

@@ -15,6 +15,9 @@ const OverallRankingTable = ({
       silver: number;
       bronze: number;
     };
+    rankCount: {
+      [key: number]: number;
+    };
   }[];
 }) => {
   return (
