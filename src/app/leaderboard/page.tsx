@@ -3,6 +3,7 @@ import React from "react";
 import OverallRankingTable from "~/app/leaderboard/_components/overall-ranking/overall-ranking-table";
 import EventCard from "~/components/common/event-card";
 import PageHeading from "~/components/common/page-heading";
+import { H3 } from "~/components/ui/typography";
 import {
   EventCodeWithPickCounts,
   getNumberOfPicksForEachEvent,
@@ -128,11 +129,13 @@ const MainLeaderboardPage = async () => {
       )}
       <PageHeading label="Event specific results" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
-        {currentSeason &&
-          currentSeason.Event.length > 0 &&
+        {currentSeason && currentSeason.Event.length > 0 ? (
           currentSeason.Event.map((event) => (
             <EventCard key={event.eventCode} event={event} type="leaderboard" />
-          ))}
+          ))
+        ) : (
+          <H3>Nothing to see here yet...</H3>
+        )}
       </div>
     </div>
   );

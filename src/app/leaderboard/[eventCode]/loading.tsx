@@ -1,6 +1,6 @@
 import React from "react";
+import TableLoading from "~/app/leaderboard/_components/table-loading";
 import PageHeading from "~/components/common/page-heading";
-import { Skeleton } from "~/components/ui/skeleton";
 import { ROUTES } from "~/lib/routes";
 
 const EventSpecificResultsLoading = () => {
@@ -12,7 +12,8 @@ const EventSpecificResultsLoading = () => {
           hasBackButton
           backButtonHref={ROUTES.LEADERBOARD}
         />
-        <Skeleton className="h-8 w-40" />
+
+        <TableLoading />
       </div>
     </div>
   );
