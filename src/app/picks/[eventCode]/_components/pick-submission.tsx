@@ -36,7 +36,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
-import GenerateRandomPick from "~/app/picks/[eventCode]/_components/generate-random-pick";
+// import GenerateRandomPick from "~/app/picks/[eventCode]/_components/generate-random-pick";
 
 const PickSubmission = () => {
   const [confirmRandomPickModalOpen, setConfirmRandomPickModalOpen] =
