@@ -55,10 +55,11 @@ model Season {
 }
 
 model Category {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   createdAt String
   text      String
   seasonId  Int
-  Season    Season @relation(fields: [seasonId], references: [id])
+  Season    Season  @relation(fields: [seasonId], references: [id])
   Picks     Pick[]
+  isGlobal  Boolean @default(false)
 }

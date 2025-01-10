@@ -20,7 +20,7 @@ const EventPickPage = async ({
 
   const [event, categories] = await Promise.all([
     getEventByEventCode(eventCode),
-    getCategoriesForActiveSeason(),
+    getCategoriesForActiveSeason({ includeGlobal: false }),
   ]);
 
   if (!event) return <div>Event not found</div>;

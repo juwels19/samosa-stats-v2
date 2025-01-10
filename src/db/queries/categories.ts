@@ -12,9 +12,11 @@ export async function getAllCategories() {
   return categories;
 }
 
-export async function getCategoriesForActiveSeason() {
+export async function getCategoriesForActiveSeason(options?: {
+  includeGlobal?: boolean;
+}) {
   const categories = await prisma.category.findMany({
-    where: { Season: { isActive: true } },
+    where: { Season: { isActive: true }, isGlobal: options?.includeGlobal },
   });
   return categories;
 }

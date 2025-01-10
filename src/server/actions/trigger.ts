@@ -59,7 +59,9 @@ export async function closeEvent({ event }: { event: Event | EventWithPicks }) {
     );
 
     const teams = await fetchTeamsForEvent(event.eventCode);
-    const categories = await getCategoriesForActiveSeason();
+    const categories = await getCategoriesForActiveSeason({
+      includeGlobal: false,
+    });
 
     const randomTeamsObj: { [key: string]: boolean } = {};
 
