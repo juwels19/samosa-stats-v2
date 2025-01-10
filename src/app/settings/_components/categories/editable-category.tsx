@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { useDoubleTap } from "use-double-tap";
 import { CategoryContext } from "~/app/settings/_components/categories/context";
+import { Badge } from "~/components/ui/badge";
 import { Textarea } from "~/components/ui/textarea";
 
 const EditableCategory = ({
@@ -45,7 +46,10 @@ const EditableCategory = ({
           }}
         />
       ) : (
-        <p>{category.text}</p>
+        <div className="flex flex-row gap-2">
+          <p>{category.text}</p>
+          {category.isGlobal && <Badge>Global</Badge>}
+        </div>
       )}
     </div>
   );

@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { setPickScoresForEvent } from "~/db/queries/picks";
 import ScoreEntryFormLoading from "~/app/scores/_components/score-entry-form-loading";
 import { H4 } from "~/components/ui/typography";
+import { Badge } from "~/components/ui/badge";
 
 const ScoreEntryForm = ({
   event,
@@ -267,9 +268,14 @@ const ScoreEntryForm = ({
                       placeholder="Select team(s)..."
                       hidePlaceholderWhenSelected
                     />
-                    <FormDescription>{`${category._count.Picks} ${
-                      category._count.Picks === 1 ? "person" : "people"
-                    } chose this category`}</FormDescription>
+                    {category.isGlobal ? (
+                      <Badge>Global</Badge>
+                    ) : (
+                      <FormDescription>{`${category._count.Picks} ${
+                        category._count.Picks === 1 ? "person" : "people"
+                      } chose this category`}</FormDescription>
+                    )}
+
                     <FormMessage />
                   </FormItem>
                 )}
