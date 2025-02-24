@@ -124,7 +124,7 @@ const PickSubmission = () => {
         userFullname:
           user?.firstName && user?.lastName
             ? `${user!.firstName} ${user!.lastName}`
-            : "",
+            : `${user!.firstName}`,
         eventId: event.id,
       }),
   });
