@@ -2,7 +2,6 @@
 
 import axios from "axios";
 import { env } from "~/lib/env";
-// import { unstable_cacheLife as cacheLife } from "next/cache";
 
 const authorizationCredential = btoa(
   `${env.FRC_EVENTS_USERNAME}:${env.FRC_EVENTS_API_TOKEN}`
@@ -15,6 +14,28 @@ const FrcEventsInstance = axios.create({
     Authorization: `Basic ${authorizationCredential}`,
   },
 });
+
+const fetchFrcEvents = async (
+  url: string,
+  method: string,
+  cache?:
+    | "default"
+    | "no-store"
+    | "reload"
+    | "no-cache"
+    | "force-cache"
+    | "only-if-cached"
+) =>
+  fetch(`https://frc-api.firstinspires.org/v3.0${url}`, {
+    method,
+    headers: {
+      Authorization: `Basic ${authorizationCredential}`,
+    },
+    cache,
+    next: {
+      revalidate: 60 * 10, // 10 minutes
+    },
+  });
 
 export type FrcEvents_Season = {
   eventCount: number;
@@ -32,30 +53,30 @@ export type FrcEvents_Season = {
 export async function fetchSeasonInfoByYear(
   year: string
 ): Promise<FrcEvents_Season> {
-  // "use cache";
-  // cacheLife("hours");
-  const result = await FrcEventsInstance.get(`/${year}`);
-  return result.data;
+  const result = await fetchFrcEvents(`/${year}`, "GET");
+
+  const data = await result.json();
+  return data;
 }
 
 export async function fetchDistrictsByYear(year: string) {
-  // "use cache";
-  // cacheLife("weeks");
   type DistrictsListType = {
     districts: { code: string; name: string }[];
     districtCount: number;
   };
-  const { data: districts } = await FrcEventsInstance.get<DistrictsListType>(
-    `/${year}/districts`
-  );
+  const response = await fetchFrcEvents(`/${year}/districts`, "GET");
+
+  const districts: DistrictsListType = await response.json();
   return districts;
 }
 
 export async function fetchEventByYearAndCode(year: string, eventCode: string) {
   try {
-    const { data: eventData } = await FrcEventsInstance.get(
-      `/${year}/events?eventCode=${eventCode}`
+    const response = await fetchFrcEvents(
+      `/${year}/events?eventCode=${eventCode}`,
+      "GET"
     );
+    const eventData = await response.json();
     return eventData.Events[0];
   } catch {
     throw new Error(`${eventCode} does not exist for the ${year} season.`);
@@ -80,9 +101,11 @@ export type FrcEvents_Teams = {
 export async function fetchTeamsForEvent(
   eventCode: string
 ): Promise<FrcEvents_Teams> {
-  const { data } = await FrcEventsInstance.get(
-    `/${eventCode.slice(0, 4)}/teams?eventCode=${eventCode.slice(4)}`
+  const response = await fetchFrcEvents(
+    `/${eventCode.slice(0, 4)}/teams?eventCode=${eventCode.slice(4)}`,
+    "GET"
   );
+  const data = await response.json();
   return data.teams;
 }
 
