@@ -17,7 +17,7 @@ const sendDiscordMessage = async (
   messageHeader: string
 ) => {
   const body = {
-    content: `🚨Samosa Stats ${messageHeader}🚨 <@1226682262070890587>`,
+    content: `🚨Samosa Stats ${messageHeader}🚨 <@&1226682262070890587>`,
     embeds: [{ ...embed, color: embedColor }],
   };
 
