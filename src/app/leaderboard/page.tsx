@@ -127,10 +127,10 @@ const MainLeaderboardPage = async () => {
           <OverallRankingTable rankingData={rankingData} />
         </>
       )}
+      <PageHeading label="Event specific results" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {currentSeason && currentSeason.Event.length > 0 ? (
           <>
-            <PageHeading label="Event specific results" />
             {currentSeason.Event.map((event) => (
               <EventCard
                 key={event.eventCode}
