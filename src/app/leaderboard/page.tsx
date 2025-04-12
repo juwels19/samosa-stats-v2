@@ -97,7 +97,6 @@ const MainLeaderboardPage = async () => {
       } else if (medal === "bronze") {
         scoresForUser[pick.userId].medalCounts.bronze += 1;
       }
-      scoresForUser[pick.userId].medalCounts.gold += negativeBonusPoints;
       return;
     }
 
