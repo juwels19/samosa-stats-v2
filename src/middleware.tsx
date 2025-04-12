@@ -7,6 +7,7 @@ const isAdminRoute = createRouteMatcher([
   "/scores(.*)",
   "/settings(.*)",
   "/approvals",
+  "/leaderboard(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

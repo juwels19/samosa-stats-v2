@@ -23,13 +23,11 @@ import { ROUTES } from "~/lib/routes";
 
 const logo = "/SS_logo.png";
 
-const menuItems = [
-  { label: "Dashboard", href: ROUTES.DASHBOARD },
-  { label: "Leaderboard", href: ROUTES.LEADERBOARD },
-];
+const menuItems = [{ label: "Dashboard", href: ROUTES.DASHBOARD }];
 
 const adminMenuItems = [
   { label: "Approvals", href: ROUTES.APPROVALS },
+  { label: "Leaderboard", href: ROUTES.LEADERBOARD },
   { label: "Scores", href: ROUTES.SCORES },
   { label: "Settings", href: ROUTES.SETTINGS },
 ];
